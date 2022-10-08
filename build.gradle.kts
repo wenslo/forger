@@ -27,3 +27,42 @@ allprojects{
         mavenCentral()
     }
 }
+
+subprojects {
+    apply {
+        plugin("org.springframework.boot")
+        plugin("io.spring.dependency-management")
+        plugin("maven-publish")
+        plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.plugin.jpa")
+        plugin("org.jetbrains.kotlin.kapt")
+    }
+    dependencies {
+    }
+    val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+    compileKotlin.kotlinOptions {
+        jvmTarget = "17"
+    }
+    val compileTestKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+    compileTestKotlin.kotlinOptions {
+        jvmTarget = "17"
+    }
+
+
+    tasks {
+        jar {
+            enabled = true
+        }
+        bootJar {
+            enabled = false
+        }
+    }
+}
+
+project(":forger-core") {
+    dependencies {
+        compileOnly(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
+    }
+}
+
