@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.core.condition
 
+import com.github.wenslo.forger.core.domain.Pageable
 import java.time.LocalDateTime
 
 
@@ -32,25 +33,25 @@ abstract class DeptIdCondition(
     var deptCodeList: List<String>? = null
 ) : OrgIdCondition()
 
-////====================================PageCondition down here====================================
-//
-//abstract class PageCondition : LongIdCondition() {
-//    var pageable: Pageable? = null
-//}
-//
-//abstract class StringPageCondition : StringIdCondition() {
-//    var pageable: Pageable? = null
-//}
-//
-//abstract class GuidPageCondition : GuidCondition() {
-//    var pageable: Pageable? = null
-//}
-//
-//abstract class OrgIdPageCondition : OrgIdCondition() {
-//    var pageable: Pageable? = null
-//}
-//
-//abstract class DeptPageCondition : DeptIdCondition() {
-//    var pageable: Pageable? = null
-//}
+//====================================PageCondition down here====================================
+
+abstract class PageCondition : LongIdCondition() {
+    var pageable: Pageable? = null
+}
+
+abstract class StringPageCondition : StringIdCondition() {
+    var pageable: Pageable? = null
+}
+
+abstract class GuidPageCondition : GuidCondition() {
+    var pageable: Pageable? = null
+}
+
+abstract class OrgIdPageCondition : OrgIdCondition() {
+    var pageable: Pageable? = null
+}
+
+abstract class DeptPageCondition : DeptIdCondition() {
+    var pageable: Pageable? = null
+}
 
