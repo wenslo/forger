@@ -66,3 +66,12 @@ project(":forger-core") {
     }
 }
 
+project(":forger-data-jpa") {
+    dependencies {
+        api(project(":forger-core"))
+        api(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
+        api(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.6.4")
+        implementation(group = "com.querydsl", name = "querydsl-jpa", version = "5.0.0")
+        implementation(group = "com.querydsl", name = "querydsl-apt", version = "5.0.0")
+    }
+}
