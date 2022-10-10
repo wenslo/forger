@@ -1,15 +1,14 @@
-
 plugins {
     id("org.springframework.boot") version "2.7.4"
     id("io.spring.dependency-management") version "1.0.14.RELEASE"
     id("maven-publish")
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.spring") version "1.7.20"
-    kotlin("plugin.jpa") version "1.7.20"
-    kotlin("kapt") version "1.7.20"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.spring") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
 }
 
-allprojects{
+allprojects {
     group = "com.github.wenslo"
     version = "0.0.1-SNAPSHOT"
 
@@ -24,6 +23,7 @@ allprojects{
         }
     }
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 }
@@ -73,5 +73,6 @@ project(":forger-data-jpa") {
         api(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.6.4")
         implementation(group = "com.querydsl", name = "querydsl-jpa", version = "5.0.0")
         implementation(group = "com.querydsl", name = "querydsl-apt", version = "5.0.0")
+        implementation(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
 }
