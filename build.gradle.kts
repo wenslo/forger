@@ -76,3 +76,11 @@ project(":forger-data-jpa") {
         implementation(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
 }
+project(":forger-data-es") {
+    dependencies {
+        api(project(":forger-core"))
+        api(group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch")
+        api(group = "commons-beanutils", name = "commons-beanutils", version = "1.9.4")
+
+    }
+}
