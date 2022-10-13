@@ -51,10 +51,12 @@ class ElasticsearchService {
             .build()
         val search = elasticsearchRestTemplate.search(build, HashMap::class.java, index)
         val result = mutableListOf<AggregationDto>()
-        search.aggregations?.toList()?.forEach {
-            val trans = it as ParsedStringTerms
-            trans.buckets.forEach { ac ->
-                result.add(AggregationDto(ac.keyAsString, ac.docCount))
+        if (search.hasAggregations()) {
+            sequenceOf(search.aggregations).forEach {
+                val trans = it as ParsedStringTerms
+                trans.buckets.forEach { ac ->
+                    result.add(AggregationDto(ac.keyAsString, ac.docCount))
+                }
             }
         }
         return result
