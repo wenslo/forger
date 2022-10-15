@@ -26,10 +26,7 @@ class ElasticsearchService {
     lateinit var elasticsearchRestTemplate: ElasticsearchRestTemplate
 
     /**
-     * 聚合
-     * @fieldName 字段名称
-     * @num 返回聚合条数
-     * @index 索引
+     * agg
      */
     fun aggs(
         fieldName: String,
@@ -45,9 +42,10 @@ class ElasticsearchService {
                 builder.withQuery(query)
             }
         }
-
-        val build = builder.addAggregation(aggregationBuilder) // 添加聚合条件
-            .withPageable(PageRequest.of(0, 1)) //符合查询条件的文档分页（不是聚合的分页）
+        // add aggregation condition
+        // not aggregation pageable
+        val build = builder.addAggregation(aggregationBuilder)
+            .withPageable(PageRequest.of(0, 1))
             .build()
         val search = elasticsearchRestTemplate.search(build, HashMap::class.java, index)
         val result = mutableListOf<AggregationDto>()
@@ -63,7 +61,7 @@ class ElasticsearchService {
     }
 
     /**
-     * 分页
+     * pageable
      */
     fun <T> page(queryBuilder: List<QueryBuilder> = emptyList(), pageable: Pageable, clazz: Class<T>): Page<T> {
         val builder = pageQueryPopulate(queryBuilder, pageable)
@@ -104,7 +102,7 @@ class ElasticsearchService {
     }
 
     /**
-     * 分页 带高亮的那种
+     * pageable and highlight
      */
     fun <T> pageWithHighlight(
         queryBuilder: List<QueryBuilder> = emptyList(),
@@ -143,8 +141,7 @@ class ElasticsearchService {
     }
 
     /**
-     * 根据条件查询该核心下总共有多少条数据
-     * @index 索引
+     * query doc count of index and return count
      */
     fun count(query: Query, index: IndexCoordinates): Long {
         return elasticsearchRestTemplate.count(query, index)

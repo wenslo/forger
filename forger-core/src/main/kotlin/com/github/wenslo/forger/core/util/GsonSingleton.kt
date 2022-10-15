@@ -13,7 +13,6 @@ object GsonSingleton {
     private const val defaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss"
 
     private fun parseDate(source: String): Date? {
-        /** 默认日期时间格式  */
         val simpleDateFormatter = SimpleDateFormat(defaultDateTimeFormat)
         return try {
             simpleDateFormatter.parse(source)
@@ -24,8 +23,8 @@ object GsonSingleton {
 
     fun getInstance(): Gson {
         if (instance == null) {
-            synchronized(GsonSingleton::class.java) { // 注意这里是类级别的锁
-                if (instance == null) {       // 这里的检测避免多线程并发时多次创建对象
+            synchronized(GsonSingleton::class.java) {
+                if (instance == null) {
                     instance = GsonBuilder()
                         .registerTypeAdapter(
                             Date::class.java,

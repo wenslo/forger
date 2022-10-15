@@ -12,7 +12,7 @@ class ApiAuthenticationToken : UsernamePasswordAuthenticationToken {
         authorities: Collection<GrantedAuthority?>?
     ) : super(principal, credentials, authorities)
 
-    /** 图片验证码 **/
+    /** verify with images **/
     var verify: String = ""
 
 }

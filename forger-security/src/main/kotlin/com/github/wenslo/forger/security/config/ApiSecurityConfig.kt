@@ -24,9 +24,6 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  * @author wenhailin
- * @version 0.0.1
- * @createTime 2018年11月24日 下午4:24
- * @description 安全配置类
  */
 @Configuration
 @EnableWebSecurity
