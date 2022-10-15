@@ -93,3 +93,11 @@ project(":forger-security") {
         api(group = "cn.hutool", name = "hutool-all", version = "5.4.0")
     }
 }
+
+project(":forger-shiro") {
+    dependencies {
+        api(project(":forger-core"))
+        implementation(group = "org.springframework.boot", name = "spring-boot-starter-web")
+        implementation(group = "org.apache.shiro", name = "shiro-spring-boot-web-starter", version = "1.10.0")
+    }
+}

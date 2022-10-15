@@ -1,2 +1,2 @@
 rootProject.name = "forger"
-include("forger-core", "forger-data-jpa", "forger-data-es", "forger-security")
+include("forger-core", "forger-data-jpa", "forger-data-es", "forger-security", "forger-shiro")
