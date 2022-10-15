@@ -63,6 +63,8 @@ subprojects {
 project(":forger-core") {
     dependencies {
         compileOnly(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
+        api(group = "com.google.code.gson", name = "gson", version = "2.9.1")
+        api(group = "org.apache.commons", name = "commons-lang3", version = "3.11")
     }
 }
 
@@ -81,6 +83,13 @@ project(":forger-data-es") {
         api(project(":forger-core"))
         api(group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch")
         api(group = "commons-beanutils", name = "commons-beanutils", version = "1.9.4")
-
+    }
+}
+project(":forger-security") {
+    dependencies {
+        api(project(":forger-core"))
+        api(group = "org.springframework.boot", name = "spring-boot-starter-web")
+        api(group = "org.springframework.boot", name = "spring-boot-starter-security")
+        api(group = "cn.hutool", name = "hutool-all", version = "5.4.0")
     }
 }
