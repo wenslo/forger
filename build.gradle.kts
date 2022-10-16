@@ -78,6 +78,14 @@ project(":forger-data-jpa") {
         implementation(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
 }
+
+project(":forger-mp") {
+    dependencies {
+        api(project(":forger-core"))
+        implementation(group = "com.baomidou", name = "mybatis-plus-boot-starter", version = "3.4.3.4")
+    }
+}
+
 project(":forger-data-es") {
     dependencies {
         api(project(":forger-core"))
