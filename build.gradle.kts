@@ -65,6 +65,7 @@ project(":forger-core") {
         compileOnly(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
         api(group = "com.google.code.gson", name = "gson", version = "2.9.1")
         api(group = "org.apache.commons", name = "commons-lang3", version = "3.11")
+        api(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
 }
 
@@ -75,7 +76,6 @@ project(":forger-data-jpa") {
         api(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.6.4")
         implementation(group = "com.querydsl", name = "querydsl-jpa", version = "5.0.0")
         implementation(group = "com.querydsl", name = "querydsl-apt", version = "5.0.0")
-        implementation(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
 }
 

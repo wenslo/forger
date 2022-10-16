@@ -2,9 +2,11 @@ package com.github.wenslo.forger.mp.service.impl
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.core.mapper.BaseMapper
+import com.baomidou.mybatisplus.core.metadata.IPage
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.github.wenslo.forger.core.condition.LongIdCondition
-import com.github.wenslo.forger.core.domain.Pageable
+import com.github.wenslo.forger.core.util.StrCaseUtil
+import com.github.wenslo.forger.mp.domain.Pagination
 import com.github.wenslo.forger.mp.model.LongIdEntity
 import com.github.wenslo.forger.mp.service.LongIdService
 import org.springframework.beans.BeanUtils
@@ -12,6 +14,12 @@ import java.util.*
 
 open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCondition>
     : LongIdService<T, C>, LongIdIntercept<M, T>() {
+
+    protected val idField = "id"
+    protected val createdAtField = "created_at"
+    protected val updatedAtField = "updated_at"
+
+
     override fun add(entity: T): T {
         val beforeResult = saveBefore(entity)
         if (Objects.nonNull(beforeResult)) {
@@ -113,15 +121,93 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         } else entity
     }
 
-    override fun queryByPage(pageable: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): Page<T>? {
+    override fun queryByPage(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>? {
+        val page: IPage<T> = Page()
+        BeanUtils.copyProperties(pagination, page)
+        var wrapper = getQueryWrapper(pagination, condition, queryWrapper)
+        val beforeResult = queryByPageBefore(pagination, condition, wrapper)
+        if (Objects.nonNull(beforeResult)) {
+            return beforeResult
+        }
+        if (pagination.pageing) {
+            super<LongIdIntercept>.page(page, wrapper)
+            BeanUtils.copyProperties(page, pagination)
+        } else {
+            val list: List<T> = super<LongIdIntercept>.list(wrapper)
+            pagination.records = list
+            pagination.total = list.size.toLong()
+        }
+        val afterResult = queryByPageAfter(pagination, condition, wrapper)
+        return if (Objects.nonNull(afterResult)) {
+            afterResult
+        } else pagination
+    }
+
+    open fun getQueryWrapper(
+        pagination: Pagination<T>,
+        condition: C,
+        queryWrapper: QueryWrapper<T>?
+    ): QueryWrapper<T> {
+        var wrapper = QueryWrapper<T>()
+        if (Objects.nonNull(queryWrapper)) {
+            wrapper = QueryWrapper<T>()
+        }
+        if (pagination.fields.isNotEmpty()) {
+            val toLowerUnderscore = StrCaseUtil.toLowerUnderscore(pagination.fields)
+            wrapper.select(*toLowerUnderscore)
+        }
+        if (pagination.query.isNotEmpty()) {
+            for (entry in pagination.query.entries) {
+                val key = entry.key
+                val value = entry.value
+                wrapper.like(StrCaseUtil.toLowerUnderscore(key), value)
+            }
+        }
+        if (pagination.section.isNotEmpty()) {
+            for (entry in pagination.section.entries) {
+                val key = entry.key
+                val value = entry.value
+                if (key.startsWith("start_")) {
+                    wrapper.ge(StrCaseUtil.toLowerUnderscore(key.replace("start_", "")), value)
+                } else if (key.startsWith("end_")) {
+                    wrapper.ge(StrCaseUtil.toLowerUnderscore(key.replace("end_", "")), value)
+                }
+            }
+        }
+        if (condition.id != null) {
+            wrapper.eq(idField, condition.id)
+        }
+        if (condition.ids?.isNotEmpty() == true) {
+            wrapper.`in`(idField, condition.ids)
+        }
+        if (condition.createdAtStart != null) {
+            wrapper.ge(createdAtField, condition.createdAtStart)
+        }
+        if (condition.createdAtEnd != null) {
+            wrapper.le(createdAtField, condition.createdAtEnd)
+        }
+        if (condition.updatedAtStart != null) {
+            wrapper.ge(updatedAtField, condition.updatedAtStart)
+        }
+        if (condition.updatedAtEnd != null) {
+            wrapper.le(updatedAtField, condition.updatedAtEnd)
+        }
+        return wrapper
+    }
+
+    override fun queryByCondition(
+        pagination: Pagination<T>,
+        condition: C,
+        queryWrapper: QueryWrapper<T>?
+    ): Pagination<T>? {
         TODO("Not yet implemented")
     }
 
-    override fun queryByCondition(pagination: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): Page<T>? {
-        TODO("Not yet implemented")
-    }
-
-    override fun queryListByCondition(pagination: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): List<T>? {
+    override fun queryListByCondition(
+        pagination: Pagination<T>,
+        condition: C,
+        queryWrapper: QueryWrapper<T>?
+    ): Pagination<T>? {
         TODO("Not yet implemented")
     }
 }

@@ -1,10 +1,9 @@
 package com.github.wenslo.forger.mp.service
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.IService
 import com.github.wenslo.forger.core.condition.LongIdCondition
-import com.github.wenslo.forger.core.domain.Pageable
+import com.github.wenslo.forger.mp.domain.Pagination
 import com.github.wenslo.forger.mp.model.LongIdEntity
 
 interface LongIdService<T : LongIdEntity, C : LongIdCondition> : IService<T> {
@@ -22,9 +21,9 @@ interface LongIdService<T : LongIdEntity, C : LongIdCondition> : IService<T> {
 
     fun detail(entity: T): T
 
-    fun queryByPage(pageable: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): Page<T>?
+    fun queryByPage(pageable: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>?
 
-    fun queryByCondition(pagination: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): Page<T>?
+    fun queryByCondition(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>?
 
-    fun queryListByCondition(pagination: Pageable, condition: C, queryWrapper: QueryWrapper<T>?): List<T>?
+    fun queryListByCondition(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>?
 }
