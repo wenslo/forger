@@ -121,26 +121,26 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         } else entity
     }
 
-    override fun queryByPage(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>? {
+    override fun queryByPage(pageable: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>? {
         val page: IPage<T> = Page()
-        BeanUtils.copyProperties(pagination, page)
-        var wrapper = getQueryWrapper(pagination, condition, queryWrapper)
-        val beforeResult = queryByPageBefore(pagination, condition, wrapper)
+        BeanUtils.copyProperties(pageable, page)
+        var wrapper = getQueryWrapper(pageable, condition, queryWrapper)
+        val beforeResult = queryByPageBefore(pageable, condition, wrapper)
         if (Objects.nonNull(beforeResult)) {
             return beforeResult
         }
-        if (pagination.pageing) {
+        if (pageable.pageing) {
             super<LongIdIntercept>.page(page, wrapper)
-            BeanUtils.copyProperties(page, pagination)
+            BeanUtils.copyProperties(page, pageable)
         } else {
             val list: List<T> = super<LongIdIntercept>.list(wrapper)
-            pagination.records = list
-            pagination.total = list.size.toLong()
+            pageable.records = list
+            pageable.total = list.size.toLong()
         }
-        val afterResult = queryByPageAfter(pagination, condition, wrapper)
+        val afterResult = queryByPageAfter(pageable, condition, wrapper)
         return if (Objects.nonNull(afterResult)) {
             afterResult
-        } else pagination
+        } else pageable
     }
 
     open fun getQueryWrapper(
@@ -200,14 +200,37 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         condition: C,
         queryWrapper: QueryWrapper<T>?
     ): Pagination<T>? {
-        TODO("Not yet implemented")
+        val page: IPage<T> = Page()
+        BeanUtils.copyProperties(pagination, page)
+        var wrapper = getQueryWrapper(pagination, condition, queryWrapper)
+        val beforeResult = queryByConditionBefore(pagination, condition, wrapper)
+        if (Objects.nonNull(beforeResult)) {
+            return beforeResult
+        }
+        val list: List<T> = super<LongIdIntercept>.list(wrapper)
+        pagination.records = list
+        pagination.total = list.size.toLong()
+        val afterResult = queryByConditionAfter(pagination, condition, wrapper)
+        return if (Objects.nonNull(afterResult)) {
+            afterResult
+        } else pagination
     }
 
     override fun queryListByCondition(
         pagination: Pagination<T>,
         condition: C,
         queryWrapper: QueryWrapper<T>?
-    ): Pagination<T>? {
-        TODO("Not yet implemented")
+    ): List<T> {
+        var wrapper = getQueryWrapper(pagination, condition, queryWrapper)
+        val beforeResult = queryListByConditionBefore(pagination, condition, wrapper)
+        if (beforeResult?.isNotEmpty() == true) {
+            return beforeResult
+        }
+        val list: List<T> = super<LongIdIntercept>.list(wrapper)
+
+        val afterResult = queryListByConditionAfter(pagination, condition, wrapper)
+        return if (afterResult?.isNotEmpty() == true) {
+            afterResult
+        } else list
     }
 }

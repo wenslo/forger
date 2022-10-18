@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.core.mapper.BaseMapper
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.github.wenslo.forger.core.condition.LongIdCondition
-import com.github.wenslo.forger.core.domain.Pageable
 import com.github.wenslo.forger.mp.domain.Pagination
 import com.github.wenslo.forger.mp.model.LongIdEntity
 
@@ -106,7 +105,7 @@ open class LongIdIntercept<M : BaseMapper<T>, T : LongIdEntity> : ServiceImpl<M,
     }
 
     protected fun <C : LongIdCondition?> queryListByConditionAfter(
-        pageable: Pageable,
+        pageable: Pagination<T>,
         condition: C,
         queryWrapper: QueryWrapper<T>?
     ): List<T>? {

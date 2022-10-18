@@ -25,5 +25,5 @@ interface LongIdService<T : LongIdEntity, C : LongIdCondition> : IService<T> {
 
     fun queryByCondition(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>?
 
-    fun queryListByCondition(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): Pagination<T>?
+    fun queryListByCondition(pagination: Pagination<T>, condition: C, queryWrapper: QueryWrapper<T>?): List<T>
 }
