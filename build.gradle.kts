@@ -109,3 +109,12 @@ project(":forger-shiro") {
         implementation(group = "org.apache.shiro", name = "shiro-spring-boot-web-starter", version = "1.10.0")
     }
 }
+project(":forger-shiro-example") {
+    dependencies {
+        api(project(":forger-core"))
+        api(project(":forger-shiro"))
+        api(project(":forger-mp"))
+        api(group = "org.springframework.boot", name = "spring-boot-starter-web")
+    }
+}
+
