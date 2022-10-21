@@ -1,2 +1,12 @@
 server:
   port: 9899
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: root
+    password: test
+  sql:
+    init:
+      schema-locations: classpath:db/schema-shiro-example.sql
+      data-locations: classpath:db/data-shiro-exmaple.sql

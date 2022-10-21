@@ -82,7 +82,7 @@ project(":forger-data-jpa") {
 project(":forger-mp") {
     dependencies {
         api(project(":forger-core"))
-        implementation(group = "com.baomidou", name = "mybatis-plus-boot-starter", version = "3.4.3.4")
+        api(group = "com.baomidou", name = "mybatis-plus-boot-starter", version = "3.4.3.4")
     }
 }
 
@@ -114,7 +114,8 @@ project(":forger-shiro-example") {
         api(project(":forger-core"))
         api(project(":forger-shiro"))
         api(project(":forger-mp"))
-        api(group = "org.springframework.boot", name = "spring-boot-starter-web")
+        implementation(group = "org.springframework.boot", name = "spring-boot-starter-web")
+        runtimeOnly(group = "com.h2database", name = "h2")
     }
 }
 
