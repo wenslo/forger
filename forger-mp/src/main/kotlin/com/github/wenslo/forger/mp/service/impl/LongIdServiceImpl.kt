@@ -13,7 +13,7 @@ import org.springframework.beans.BeanUtils
 import java.util.*
 
 open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCondition>
-    : LongIdService<T, C>, LongIdIntercept<M, T>() {
+    : LongIdService<T, C>, BaseServiceIntercept<M, T>() {
 
     protected val idField = "id"
     protected val createdAtField = "created_at"
@@ -25,7 +25,7 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         if (Objects.nonNull(beforeResult)) {
             return beforeResult!!
         }
-        super<LongIdIntercept>.save(entity)
+        super<BaseServiceIntercept>.save(entity)
         val afterResult = saveAfter(entity)
         return if (Objects.nonNull(afterResult)) {
             afterResult!!
@@ -37,7 +37,7 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         if (Objects.nonNull(beforeResult)) {
             return beforeResult!!
         }
-        val result: Boolean = super<LongIdIntercept>.updateById(entity)
+        val result: Boolean = super<BaseServiceIntercept>.updateById(entity)
         if (result) {
             val dbRecord = getById(entity.id)
             BeanUtils.copyProperties(dbRecord, entity)
@@ -71,7 +71,7 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         if (beforeResult?.isNotEmpty() == true) {
             return beforeResult
         }
-        super<LongIdIntercept>.saveBatch(entities)
+        super<BaseServiceIntercept>.saveBatch(entities)
         val afterResult = addBatchAfter(entities)
         return if (afterResult?.isNotEmpty() == true) {
             afterResult
@@ -130,10 +130,10 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
             return beforeResult
         }
         if (pageable.pageing) {
-            super<LongIdIntercept>.page(page, wrapper)
+            super<BaseServiceIntercept>.page(page, wrapper)
             BeanUtils.copyProperties(page, pageable)
         } else {
-            val list: List<T> = super<LongIdIntercept>.list(wrapper)
+            val list: List<T> = super<BaseServiceIntercept>.list(wrapper)
             pageable.records = list
             pageable.total = list.size.toLong()
         }
@@ -207,7 +207,7 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         if (Objects.nonNull(beforeResult)) {
             return beforeResult
         }
-        val list: List<T> = super<LongIdIntercept>.list(wrapper)
+        val list: List<T> = super<BaseServiceIntercept>.list(wrapper)
         pagination.records = list
         pagination.total = list.size.toLong()
         val afterResult = queryByConditionAfter(pagination, condition, wrapper)
@@ -226,7 +226,7 @@ open class LongIdServiceImpl<M : BaseMapper<T>, T : LongIdEntity, C : LongIdCond
         if (beforeResult?.isNotEmpty() == true) {
             return beforeResult
         }
-        val list: List<T> = super<LongIdIntercept>.list(wrapper)
+        val list: List<T> = super<BaseServiceIntercept>.list(wrapper)
 
         val afterResult = queryListByConditionAfter(pagination, condition, wrapper)
         return if (afterResult?.isNotEmpty() == true) {

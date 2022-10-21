@@ -7,7 +7,7 @@ import com.github.wenslo.forger.core.condition.LongIdCondition
 import com.github.wenslo.forger.mp.domain.Pagination
 import com.github.wenslo.forger.mp.model.LongIdEntity
 
-open class LongIdIntercept<M : BaseMapper<T>, T : LongIdEntity> : ServiceImpl<M, T>() {
+open class BaseServiceIntercept<M : BaseMapper<T>, T : LongIdEntity> : ServiceImpl<M, T>() {
     protected fun saveBefore(entity: T): T? {
         return null
     }
