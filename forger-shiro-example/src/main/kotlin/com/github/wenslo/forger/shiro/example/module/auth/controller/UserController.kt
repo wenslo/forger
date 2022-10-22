@@ -6,6 +6,7 @@ import com.github.wenslo.forger.shiro.example.module.auth.entity.User
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -23,9 +24,19 @@ class UserController {
             try {
                 subject.login(token)
             } catch (ae: AuthenticationException) {
-                return if (ae.message != null) Response.serverError(ae.message!!) else Response.serverError("Login failed")
+                return Response.serverError(ae.message ?: "Login failed")
             }
         }
         return Response.complete("Login succeed")
+    }
+
+    @GetMapping("me")
+    fun me(): Response {
+        logger.info("Get current user info")
+        val subject = SecurityUtils.getSubject()
+        if (subject.principal != null) {
+            return Response.success(subject.principal)
+        }
+        return Response.error("You must be login")
     }
 }

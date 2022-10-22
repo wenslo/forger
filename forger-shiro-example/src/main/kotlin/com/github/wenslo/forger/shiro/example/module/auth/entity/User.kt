@@ -15,7 +15,7 @@ data class User(
     @TableField(value = "account_non_locked")
     private var accountNonLocked: Boolean = false,
     @TableField(exist = false)
-    private var credentialsNonExpired: Boolean = false,
+    private var credentialsNonExpired: Boolean = true,
     private var enabled: Boolean = false,
     @TableField(exist = false)
     private var authorities: Set<String> = setOf(),
