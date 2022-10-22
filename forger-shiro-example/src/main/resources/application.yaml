@@ -10,3 +10,7 @@ spring:
     init:
       schema-locations: classpath:db/schema-shiro-example.sql
       data-locations: classpath:db/data-shiro-exmaple.sql
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+shiro:
+  loginUrl: login

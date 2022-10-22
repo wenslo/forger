@@ -1,10 +1,11 @@
-package com.github.wenslo.forger.shiro.example.module.auth.service
+package com.github.wenslo.forger.shiro.example.module.auth.service.impl
 
 import com.github.wenslo.forger.mp.service.impl.LongIdServiceImpl
 import com.github.wenslo.forger.shiro.core.UserDetails
 import com.github.wenslo.forger.shiro.example.module.auth.condition.UserCondition
 import com.github.wenslo.forger.shiro.example.module.auth.entity.User
 import com.github.wenslo.forger.shiro.example.module.auth.mapper.UserMapper
+import com.github.wenslo.forger.shiro.example.module.auth.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

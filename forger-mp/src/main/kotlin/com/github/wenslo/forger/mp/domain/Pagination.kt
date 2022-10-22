@@ -19,9 +19,6 @@ data class Pagination<T>(
 
     var condition: Map<String, String> = HashMap(),
 
-    /**
-     * 用户自定义参数
-     */
     var custom: Map<String, String> = HashMap(),
 
     var section: Map<String, String> = HashMap(),

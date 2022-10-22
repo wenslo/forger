@@ -14,10 +14,12 @@ data class User(
     private var accountNonExpired: Boolean = false,
     @TableField(value = "account_non_locked")
     private var accountNonLocked: Boolean = false,
-    @TableField(value = "credentials_non_expired")
+    @TableField(exist = false)
     private var credentialsNonExpired: Boolean = false,
     private var enabled: Boolean = false,
+    @TableField(exist = false)
     private var authorities: Set<String> = setOf(),
+    @TableField(exist = false)
     private var roleCodeSet: Set<String> = setOf(),
 ) : LongIdEntity(), UserDetails {
 
