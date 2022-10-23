@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration
 class ShiroConfig {
     companion object {
         const val DEFAULT_GLOBAL_SESSION_TIMEOUT: Long = 24 * 60 * 60 * 1000
+//        const val DEFAULT_GLOBAL_SESSION_TIMEOUT: Long = 5 * 1000
 
         const val REMEMBER_ME_KEY = "M1RIN2FVNGt6T2lRU2VNAA=="
     }

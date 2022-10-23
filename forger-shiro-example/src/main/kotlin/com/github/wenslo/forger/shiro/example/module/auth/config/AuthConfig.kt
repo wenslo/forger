@@ -11,7 +11,10 @@ class AuthConfig {
     @Bean
     fun shiroFilterChainDefinition(): ShiroFilterChainDefinition {
         return DefaultShiroFilterChainDefinition().apply {
-            this.addPathDefinition("/**", "anon")
+            this.addPathDefinition("/login", "anon")
+            this.addPathDefinition("/logout", "anon")
+            this.addPathDefinition("/unauthorized", "anon")
+            this.addPathDefinition("/**", "authc")
         }
     }
 }

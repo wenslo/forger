@@ -30,6 +30,17 @@ class UserController {
         return Response.complete("Login succeed")
     }
 
+    @PostMapping("logout")
+    fun logout(): Response {
+        logger.info("Logout beginning")
+        val subject = SecurityUtils.getSubject()
+        subject.logout()
+        return Response.complete("Logout succeed")
+    }
+
+    @GetMapping("unauthorized")
+    fun unauthorized(): Response = Response.UNAUTHORIZED
+
     @GetMapping("me")
     fun me(): Response {
         logger.info("Get current user info")

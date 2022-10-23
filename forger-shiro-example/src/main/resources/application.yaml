@@ -13,4 +13,6 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
 shiro:
-  loginUrl: login
+  loginUrl: unauthorized
+  unauthorizedUrl: unauthorized
+
