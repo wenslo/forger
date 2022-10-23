@@ -18,7 +18,7 @@ data class User(
     private var credentialsNonExpired: Boolean = true,
     private var enabled: Boolean = false,
     @TableField(exist = false)
-    private var authorities: Set<String> = setOf(),
+    private var authorities: Set<String> = setOf("user:read", "user:update", "role:read"),
     @TableField(exist = false)
     private var roleCodeSet: Set<String> = setOf(),
 ) : LongIdEntity(), UserDetails {
