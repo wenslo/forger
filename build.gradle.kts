@@ -119,3 +119,10 @@ project(":forger-shiro-example") {
     }
 }
 
+project(":forger-workflow") {
+    dependencies {
+        api(project(":forger-core"))
+        api(project(":forger-mp"))
+        runtimeOnly(group = "com.h2database", name = "h2")
+    }
+}
