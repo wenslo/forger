@@ -1,16 +1,23 @@
 package com.github.wenslo.forger.workflow.enums
 
+import com.github.wenslo.forger.core.domain.BaseEnum
+
 /**
  * @author wenhailin
  * @date 2022/10/25 09:10
  */
-enum class ExecuteStatus(
-    var code: Int,
-    var label: String
-) {
-    SUCCEED(0, "动作执行成功"),
-    ERROR(-1, "动作执行失败"),
-    WAITING(451, "等待回调"),
-    PARAMS_NOT_EXISTS(1030, "动作执行参数不存在"),
-    THRESHOLD_NOT_PASS(5000, "门禁规则判断未通过"),
+enum class ExecuteStatus(private val code: String, private val label: String) : BaseEnum {
+    SUCCEED("0", "SUCCEED"),
+    ERROR("-1", "ERROR"),
+    WAITING("451", "WAITING"),
+    PARAMS_NOT_EXISTS("1030", "PARAMS_NOT_EXISTS"),
+    THRESHOLD_NOT_PASS("5000", "THRESHOLD_NOT_PASS");
+
+    override fun code(): String {
+        return code
+    }
+
+    override fun label(): String {
+        return label
+    }
 }
