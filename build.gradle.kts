@@ -123,6 +123,7 @@ project(":forger-workflow") {
     dependencies {
         api(project(":forger-core"))
         api(project(":forger-mp"))
+        implementation(group = "org.springframework.boot", name = "spring-boot-starter-activemq")
         runtimeOnly(group = "com.h2database", name = "h2")
     }
 }
