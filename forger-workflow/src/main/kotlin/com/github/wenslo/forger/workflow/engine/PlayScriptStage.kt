@@ -1,5 +1,7 @@
 package com.github.wenslo.forger.workflow.engine
 
+import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+
 /**
  * @author wenhailin
  * @date 2022/10/26 20:33
@@ -9,9 +11,9 @@ interface PlayScriptStage {
 
     fun executeAgain()
 
-    fun execute()
+    fun execute(record: PlayScriptExecuteRecord)
 
-    fun getExecuteResult()
+    fun getExecuteResult(recordLogId: Int)
 
     fun callback()
 
