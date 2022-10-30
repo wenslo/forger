@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.engine
+package com.github.wenslo.forger.workflow.service
 
 import javax.jms.Session
 import javax.jms.TextMessage

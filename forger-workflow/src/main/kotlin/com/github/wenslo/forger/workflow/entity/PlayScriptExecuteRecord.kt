@@ -1,6 +1,6 @@
 package com.github.wenslo.forger.workflow.entity
 
-import com.github.wenslo.forger.mp.model.LongIdEntity
+import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 
 /**
