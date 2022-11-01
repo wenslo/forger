@@ -7,7 +7,7 @@ import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
  * @date 2022/10/26 20:33
  */
 interface PlayScriptStage {
-    fun executeBefore()
+    fun paramValid()
 
     fun executeAgain()
 
