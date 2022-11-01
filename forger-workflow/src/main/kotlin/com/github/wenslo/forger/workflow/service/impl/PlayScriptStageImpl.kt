@@ -2,7 +2,7 @@ package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
-import com.github.wenslo.forger.workflow.cache.ExecuteFactory.Companion.EXECUTOR_MAP
+import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
@@ -42,11 +42,26 @@ class PlayScriptStageImpl : PlayScriptStage {
     }
 
     private fun invokeExecutor(record: PlayScriptExecuteRecord) {
-        for (executorId in EXECUTOR_MAP.keys) {
+        val current = record.current
+        if (current.isEmpty()) {
+            logger.info("It is empty at current record")
+            return
+        }
+        //TODO actions
+        val actions = listOf<PlayScriptAction>()
+        val failureActions = mutableListOf<String>()
+        var hasFailed = false
+        for (action in actions) {
+            val executorId = action.executorId
             val executor = executeFactory.getExecutor(executorId) ?: continue
             logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
-            logger.info("Executed result is ：{}", executor.execute(Any()))
+            val executeResponse = executor.execute(Any())
+            if (executeResponse.code != 0) {
+                failureActions.add(action.uniqueId)
+                hasFailed = true
+            }
         }
+
     }
 
     override fun getExecuteResult(recordLogId: Int) {
