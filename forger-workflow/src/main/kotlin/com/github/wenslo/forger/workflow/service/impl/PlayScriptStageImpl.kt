@@ -2,6 +2,7 @@ package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
+import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordRepository
@@ -28,12 +29,16 @@ class PlayScriptStageImpl : PlayScriptStage {
     lateinit var executeFactory: ExecuteFactory
 
 
-    override fun paramValid() {
+    override fun paramValid(playScript: PlayScript) {
         TODO("Not yet implemented")
     }
 
-    override fun executeAgain() {
-        TODO("Not yet implemented")
+    override fun run(playScript: PlayScript) {
+        logger.info("PlayScript is running...")
+        logger.info("PlayScript info is {}", gson.toJson(playScript))
+        //TODO save play script
+        // save play script record
+        val playScriptExecuteRecord = PlayScriptExecuteRecord()
     }
 
     override fun execute(record: PlayScriptExecuteRecord) {

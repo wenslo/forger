@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.workflow.service
 
+import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 
 /**
@@ -7,9 +8,9 @@ import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
  * @date 2022/10/26 20:33
  */
 interface PlayScriptStage {
-    fun paramValid()
+    fun paramValid(playScript: PlayScript)
 
-    fun executeAgain()
+    fun run(playScript: PlayScript)
 
     fun execute(record: PlayScriptExecuteRecord)
 

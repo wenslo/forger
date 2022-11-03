@@ -1,8 +1,11 @@
 package com.github.wenslo.forger.workflow.controller
 
+import com.github.wenslo.forger.core.inline.getLogger
+import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,16 +16,19 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("playScript")
 class PlayScriptController {
+    val logger = getLogger<PlayScriptController>()
+
     @Autowired
     lateinit var playScriptStage: PlayScriptStage
 
     @PostMapping("save")
-    fun save() {
-        playScriptStage.paramValid()
+    fun save(@RequestBody playScript: PlayScript) {
+        playScriptStage.paramValid(playScript)
     }
 
     @PostMapping("saveAndExecute")
-    fun saveAndExecute() {
-        playScriptStage.paramValid()
+    fun saveAndExecute(@RequestBody playScript: PlayScript) {
+        playScriptStage.paramValid(playScript)
+        playScriptStage.run(playScript)
     }
 }
