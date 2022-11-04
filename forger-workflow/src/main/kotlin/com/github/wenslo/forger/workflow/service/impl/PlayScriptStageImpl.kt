@@ -37,8 +37,15 @@ class PlayScriptStageImpl : PlayScriptStage {
         logger.info("PlayScript is running...")
         logger.info("PlayScript info is {}", gson.toJson(playScript))
         //TODO save play script
-        // save play script record
-        val playScriptExecuteRecord = PlayScriptExecuteRecord()
+        //TODO save play script line
+        //TODO save play script node
+        //TODO save play script actions
+        //TODO save play script record
+        val record = PlayScriptExecuteRecord()
+        record.playScriptId = playScript.id!!
+        record.playScriptUniqueId = playScript.uniqueId
+        // search first node to execute, save record and generate ExecuteShip
+
     }
 
     override fun execute(record: PlayScriptExecuteRecord) {

@@ -9,4 +9,9 @@ import org.springframework.stereotype.Repository
  * @date 2022/10/30 11:04
  */
 @Repository
-interface PlayScriptActionRepository : LongIdRepository<PlayScriptAction, Long>
+interface PlayScriptActionRepository : LongIdRepository<PlayScriptAction, Long> {
+    /**
+     * find previous is empty
+     */
+    fun findByPreviousEmpty(emptyFlag: Boolean): List<PlayScriptAction>
+}
