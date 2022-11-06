@@ -9,7 +9,7 @@ import com.github.wenslo.forger.workflow.enums.IsFlag
  * @date 2022/10/27 09:12
  */
 data class PlayScriptAction(
-    var playScriptId: Int = 0,
+    var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",
     var uniqueId: String = "",
     var previous: List<String> = emptyList(),

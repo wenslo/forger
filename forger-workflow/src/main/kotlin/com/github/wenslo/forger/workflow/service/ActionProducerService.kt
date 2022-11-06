@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.workflow.service
 
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 import java.util.*
 
@@ -9,7 +10,7 @@ import java.util.*
  */
 interface ActionProducerService {
 
-    fun sendNow(record: PlayScriptExecuteRecord)
+    fun sendNow(ship: ExecuteShip)
 
     fun sendFixedTime(record: PlayScriptExecuteRecord, executeTime: Date)
 

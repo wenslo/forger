@@ -2,10 +2,11 @@ package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptAction
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
-import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordRepository
+import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
+import com.github.wenslo.forger.workflow.service.ActionProducerService
+import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,10 +24,16 @@ class PlayScriptStageImpl : PlayScriptStage {
     lateinit var gson: Gson
 
     @Autowired
-    lateinit var recordRepository: PlayScriptExecuteRecordRepository
+    lateinit var recordService: PlayScriptExecuteRecordService
 
     @Autowired
     lateinit var executeFactory: ExecuteFactory
+
+    @Autowired
+    lateinit var actionProducerService: ActionProducerService
+
+    @Autowired
+    lateinit var actionRepository: PlayScriptActionRepository
 
 
     override fun paramValid(playScript: PlayScript) {
@@ -41,38 +48,35 @@ class PlayScriptStageImpl : PlayScriptStage {
         //TODO save play script node
         //TODO save play script actions
         //TODO save play script record
-        val record = PlayScriptExecuteRecord()
-        record.playScriptId = playScript.id!!
-        record.playScriptUniqueId = playScript.uniqueId
-        // search first node to execute, save record and generate ExecuteShip
 
+        val ships = recordService.saveRecordAndGenerateShip(playScript)
+        //play scripts may different types
+        //sending ships to executing
+        ships.forEach {
+            actionProducerService.sendNow(it)
+        }
     }
 
-    override fun execute(record: PlayScriptExecuteRecord) {
-        logger.info("Execute starting... record info is ${gson.toJson(record)}")
-        this.invokeExecutor(record)
+    override fun execute(ship: ExecuteShip) {
+        logger.info("Execute starting... ship info is ${gson.toJson(ship)}")
+        this.invokeExecutor(ship)
     }
 
-    private fun invokeExecutor(record: PlayScriptExecuteRecord) {
-        val current = record.current
-        if (current.isEmpty()) {
+    private fun invokeExecutor(ship: ExecuteShip) {
+        val current = ship.current
+        if (current.isBlank()) {
             logger.info("It is empty at current record")
             return
         }
-        //TODO actions
-        val actions = listOf<PlayScriptAction>()
-        val failureActions = mutableListOf<String>()
-        var hasFailed = false
-        for (action in actions) {
-            val executorId = action.executorId
-            val executor = executeFactory.getExecutor(executorId) ?: continue
-            logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
-            val executeResponse = executor.execute(Any())
-            if (executeResponse.code != 0) {
-                failureActions.add(action.uniqueId)
-                hasFailed = true
+        val action = actionRepository.findTopByPlayScriptIdAndUniqueId(ship.playScriptId, current)
+        action?.let {
+            executeFactory.getExecutor(it.executorId)?.let { executor ->
+                logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
+                val executeResponse = executor.execute(Any())
+                //TODO handler at there
             }
         }
+
 
     }
 

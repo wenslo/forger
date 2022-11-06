@@ -1,7 +1,7 @@
 package com.github.wenslo.forger.workflow.service
 
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 
 /**
  * @author wenhailin
@@ -12,7 +12,7 @@ interface PlayScriptStage {
 
     fun run(playScript: PlayScript)
 
-    fun execute(record: PlayScriptExecuteRecord)
+    fun execute(ship: ExecuteShip)
 
     fun getExecuteResult(recordLogId: Int)
 

@@ -1,5 +1,7 @@
 package com.github.wenslo.forger.workflow.service.impl
 
+import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
+import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondition
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
@@ -15,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
  * @date 2022/11/4 15:42
  */
 @Service
-class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService {
+class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService,
+    LongIdServiceImpl<PlayScriptExecuteRecord, PlayScriptExecuteRecordCondition, PlayScriptExecuteRecordRepository>() {
     @Autowired
     lateinit var recordRepository: PlayScriptExecuteRecordRepository
 
@@ -31,7 +34,7 @@ class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService {
         record.playScriptId = playScriptId
         record.playScriptUniqueId = playScriptUniqueId
 
-        // find first be execute actions and then populate
+        // find first be executing actions and then populate
         val actions = actionRepository.findByPreviousEmpty(true)
         record.current = actions.map { it.uniqueId }.toList()
         this.recordRepository.save(record)

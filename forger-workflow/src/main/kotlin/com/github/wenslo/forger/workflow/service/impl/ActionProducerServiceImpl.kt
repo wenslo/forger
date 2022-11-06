@@ -1,6 +1,7 @@
 package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.exceptions.ExecuteException
 import com.github.wenslo.forger.workflow.service.ActionProducerService
@@ -38,14 +39,14 @@ class ActionProducerServiceImpl : ActionProducerService {
     @Autowired
     lateinit var jmsTemplate: JmsTemplate
 
-    override fun sendNow(record: PlayScriptExecuteRecord) {
-        logger.info("Sending text to MQ now, message payload is {}", gson.toJson(record))
+    override fun sendNow(ship: ExecuteShip) {
+        logger.info("Sending text to MQ now, message payload is {}", gson.toJson(ship))
         jmsTemplate.send(EXECUTE_QUEUE) { session: Session ->
             session.createTextMessage().apply {
-                this.setStringProperty(INSTANCE_ID_NAME, record.playScriptId.toString())
-                this.setStringProperty(EXECUTE_RECORD_ID_NAME, record.playScriptId.toString())
+                this.setStringProperty(INSTANCE_ID_NAME, ship.playScriptId.toString())
+                this.setStringProperty(EXECUTE_RECORD_ID_NAME, ship.playScriptRecordId.toString())
                 this.setStringProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, "3000")
-                this.text = gson.toJson(record)
+                this.text = gson.toJson(ship)
             }
         }
     }

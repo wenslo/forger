@@ -1,7 +1,7 @@
 package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.service.ActionConsumerService
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import com.google.gson.Gson
@@ -29,7 +29,7 @@ class ActionConsumerServiceImpl : ActionConsumerService {
     @JmsListener(destination = "executor")
     override fun receiveExecuteMessageFromQueue(textMessage: TextMessage, session: Session) {
         try {
-            val record = gson.fromJson(textMessage.text, PlayScriptExecuteRecord::class.java)
+            val record = gson.fromJson(textMessage.text, ExecuteShip::class.java)
             playScriptStage.execute(record)
             textMessage.acknowledge()
         } catch (e: Exception) {
