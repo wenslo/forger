@@ -7,6 +7,7 @@ import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
 import com.github.wenslo.forger.workflow.service.ActionProducerService
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
+import com.github.wenslo.forger.workflow.service.PlayScriptService
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,6 +36,9 @@ class PlayScriptStageImpl : PlayScriptStage {
     @Autowired
     lateinit var actionRepository: PlayScriptActionRepository
 
+    @Autowired
+    lateinit var playScriptService: PlayScriptService
+
 
     override fun paramValid(playScript: PlayScript) {
         TODO("Not yet implemented")
@@ -43,12 +47,13 @@ class PlayScriptStageImpl : PlayScriptStage {
     override fun run(playScript: PlayScript) {
         logger.info("PlayScript is running...")
         logger.info("PlayScript info is {}", gson.toJson(playScript))
-        //TODO save play script
-        //TODO save play script line
-        //TODO save play script node
-        //TODO save play script actions
-        //TODO save play script record
-
+        //save play script
+        playScriptService.savePlayScript(playScript)
+        //save play script line
+        playScriptService.savePlayScriptNodeLine(playScript)
+        //save play script node and actions
+        playScriptService.savePlayScriptNode(playScript)
+        //save play script record
         val ships = recordService.saveRecordAndGenerateShip(playScript)
         //play scripts may different types
         //sending ships to executing

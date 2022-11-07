@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository
  * @date 2022/10/30 11:04
  */
 @Repository
-interface PlayScriptRepository : LongIdRepository<PlayScript, Long>
+interface PlayScriptRepository : LongIdRepository<PlayScript, Long> {
+    fun findTopByUniqueIdOrderByVersionNumDesc(uniqueId: String): PlayScript?
+}

@@ -9,5 +9,9 @@ import com.github.wenslo.forger.workflow.entity.PlayScript
  * @date 2022/11/3 09:25
  */
 interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
-    fun savePlayScript()
+    fun savePlayScript(playScript: PlayScript)
+
+    fun savePlayScriptNodeLine(playScript: PlayScript)
+    fun savePlayScriptNode(playScript: PlayScript)
+    fun savePlayScriptAction(playScript: PlayScript)
 }
