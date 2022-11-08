@@ -11,8 +11,8 @@ data class PlayScript(
     var name: String = "",
     var versionNum: Int = 1,
     var status: Int = 1,
-    var params: Map<String, Any> = emptyMap(),
     var nodes: List<PlayScriptNode> = listOf(),
     var lines: List<PlayScriptNodeLine> = listOf(),
-    var actions: List<Any> = listOf()
+    var shuttles: Map<String, List<PlayScriptActionShuttle>> = emptyMap(),
+    var params: Map<String, Any> = emptyMap(),
 ) : LongIdEntity()

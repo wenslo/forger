@@ -1,14 +1,15 @@
 package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.exceptions.BusinessException
+import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
+import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptAction
-import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
-import com.github.wenslo.forger.workflow.repository.PlayScriptNodeLineRepository
-import com.github.wenslo.forger.workflow.repository.PlayScriptNodeRepository
-import com.github.wenslo.forger.workflow.repository.PlayScriptRepository
+import com.github.wenslo.forger.workflow.entity.PlayScriptParam
+import com.github.wenslo.forger.workflow.enums.ActionType
+import com.github.wenslo.forger.workflow.repository.*
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -23,6 +24,9 @@ import java.util.*
 @Transactional(readOnly = true)
 class PlayScriptServiceImpl : PlayScriptService,
     LongIdServiceImpl<PlayScript, PlayScriptCondition, PlayScriptRepository>() {
+    companion object {
+        val logger = getLogger<PlayScriptServiceImpl>()
+    }
 
     @Autowired
     lateinit var playScriptRepository: PlayScriptRepository
@@ -35,6 +39,15 @@ class PlayScriptServiceImpl : PlayScriptService,
 
     @Autowired
     lateinit var playScriptActionRepository: PlayScriptActionRepository
+
+    @Autowired
+    lateinit var playScriptActionShuttleRepository: PlayScriptActionShuttleRepository
+
+    @Autowired
+    lateinit var playScriptParamRepository: PlayScriptParamRepository
+
+    @Autowired
+    lateinit var executeFactory: ExecuteFactory
 
     @Transactional
     override fun savePlayScript(playScript: PlayScript) {
@@ -105,9 +118,46 @@ class PlayScriptServiceImpl : PlayScriptService,
                     this.previous = previousActions
                 }
                 this.executorId = it.executorId
-                //TODO asyncFlag cycleFlag cycleCount actionType
+                this.actionType =
+                    executeFactory.getExecutor(it.executorId)?.getResourceInfo()?.actionType ?: ActionType.NORMAL
+                //asyncFlag cycleFlag cycleCount
             }
         }.toList()
         playScriptActionRepository.saveAll(actions)
+    }
+
+    override fun saveParamShuttles(playScript: PlayScript) {
+        val shuttles = playScript.shuttles
+        if (shuttles.isEmpty()) {
+            return
+        }
+        val list = shuttles.values.flatten().map {
+            it.playScriptId = it.playScriptId
+            it.playScriptUniqueId = it.playScriptUniqueId
+            it
+        }.toList()
+        playScriptActionShuttleRepository.saveAll(list)
+    }
+
+    override fun savePlayScriptParams(playScript: PlayScript) {
+        val params = playScript.params
+        if (params.isEmpty()) {
+            return
+        }
+        val playScriptId = playScript.id
+        val playScriptUniqueId = playScript.uniqueId
+        val executorIdMap = playScript.nodes.associateBy({ it.uniqueId }, { it.executorId })
+        val list = params.entries.map {
+            val actionUniqueId = it.key
+            PlayScriptParam().apply {
+                this.playScriptId = playScriptId ?: 0
+                this.playScriptUniqueId = playScriptUniqueId
+                this.actionUniqueId = actionUniqueId
+                this.actionExecutorId = executorIdMap[actionUniqueId] ?: ""
+                this.params = it.value
+            }
+        }.toList()
+        playScriptParamRepository.saveAll(list)
+
     }
 }

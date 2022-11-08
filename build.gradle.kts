@@ -125,6 +125,15 @@ project(":forger-workflow") {
         api(project(":forger-data-jpa"))
         implementation(group = "org.springframework.boot", name = "spring-boot-starter-web")
         implementation(group = "org.springframework.boot", name = "spring-boot-starter-activemq")
+        implementation(group = "org.springframework.boot", name = "spring-boot-starter-activemq")
+        implementation(group = "org.springframework.boot", name = "spring-boot-starter-data-mongodb")
         runtimeOnly(group = "com.h2database", name = "h2")
+    }
+}
+
+project(":forger-hbase") {
+    dependencies {
+        implementation("org.apache.hbase:hbase-client:2.5.0")
+        implementation("org.apache.hbase:hbase:2.5.0")
     }
 }

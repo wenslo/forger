@@ -12,6 +12,12 @@ interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
     fun savePlayScript(playScript: PlayScript)
 
     fun savePlayScriptNodeLine(playScript: PlayScript)
+
     fun savePlayScriptNode(playScript: PlayScript)
+
     fun savePlayScriptAction(playScript: PlayScript)
+
+    fun saveParamShuttles(playScript: PlayScript)
+    
+    fun savePlayScriptParams(playScript: PlayScript)
 }

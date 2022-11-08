@@ -53,6 +53,10 @@ class PlayScriptStageImpl : PlayScriptStage {
         playScriptService.savePlayScriptNodeLine(playScript)
         //save play script node and actions
         playScriptService.savePlayScriptNode(playScript)
+        //save action params
+        playScriptService.savePlayScriptParams(playScript)
+        //save action param shuttles
+        playScriptService.saveParamShuttles(playScript)
         //save play script record
         val ships = recordService.saveRecordAndGenerateShip(playScript)
         //play scripts may different types
