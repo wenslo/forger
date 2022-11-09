@@ -4,7 +4,10 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
+import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
+import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordLogRepository
 import com.github.wenslo.forger.workflow.service.ActionProducerService
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import com.github.wenslo.forger.workflow.service.PlayScriptService
@@ -12,6 +15,7 @@ import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 /**
  * @author wenhailin
@@ -38,6 +42,9 @@ class PlayScriptStageImpl : PlayScriptStage {
 
     @Autowired
     lateinit var playScriptService: PlayScriptService
+
+    @Autowired
+    lateinit var recordLogRepository: PlayScriptExecuteRecordLogRepository
 
 
     override fun paramValid(playScript: PlayScript) {
@@ -81,12 +88,38 @@ class PlayScriptStageImpl : PlayScriptStage {
         action?.let {
             executeFactory.getExecutor(it.executorId)?.let { executor ->
                 logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
+                //record log generate
+                val recordLog = generateRecordLog(ship, it.executorId)
                 val executeResponse = executor.execute(Any())
-                //TODO handler at there
+                //populate record log information
+                recordLog.apply {
+                    status = executeResponse.status
+                    message = executeResponse.message
+                    hasReportFile = executeResponse.hasReportFile
+                    link = executeResponse.link
+                }.also { log ->
+                    recordLogRepository.save(log)
+                }
+                //TODO engine flow processing
             }
         }
 
 
+    }
+
+    private fun generateRecordLog(ship: ExecuteShip, executorId: String): PlayScriptExecuteRecordLog {
+        val recordLog = PlayScriptExecuteRecordLog(
+            playScriptId = ship.playScriptId,
+            playScriptUniqueId = ship.playScriptUniqueId,
+            recordId = ship.playScriptRecordId,
+            actionUniqueId = ship.current,
+            executorId = executorId,
+            beginTime = LocalDateTime.now(),
+            executeFlag = IsFlag.YES
+        ).also {
+            recordLogRepository.save(it)
+        }
+        return recordLog
     }
 
     override fun getExecuteResult(recordLogId: Int) {

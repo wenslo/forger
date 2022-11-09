@@ -22,6 +22,9 @@ class WorkWxExecutor : BaseExecutor() {
 
 
     override fun execute(any: Any): ExecutorResponse {
+        //TODO get template dto
+        //TODO get parameter dto
+        //TODO return executed response
         TODO("Not yet implemented")
     }
 
