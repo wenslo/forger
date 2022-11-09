@@ -6,10 +6,10 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 
 /**
  * @author wenhailin
- * @date 2022/11/8 10:40
+ * @date 2022/11/9 22:03
  */
 @Document
-data class PlayScriptParam(
+data class ExecutorTemplateParam(
     @MongoId
     var id: ObjectId? = null,
     var playScriptId: Long = 0,
