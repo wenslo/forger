@@ -137,3 +137,8 @@ project(":forger-hbase") {
         implementation("org.apache.hbase:hbase:2.5.0")
     }
 }
+project(":forger-cloud-server") {
+    dependencies {
+        implementation("org.springframework.cloud:spring-cloud-config-server:3.1.5")
+    }
+}
