@@ -135,6 +135,9 @@ project(":forger-hbase") {
     dependencies {
         implementation("org.apache.hbase:hbase-client:2.5.0")
         implementation("org.apache.hbase:hbase:2.5.0")
+        compileOnly("org.apache.hadoop:hadoop-client:3.3.4")
+        implementation("org.apache.hadoop:hadoop-common:3.3.4")
+
     }
 }
 project(":forger-cloud-server") {

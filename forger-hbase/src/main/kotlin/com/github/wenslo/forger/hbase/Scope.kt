@@ -5,8 +5,10 @@ package com.github.wenslo.forger.hbase
  * @date 2022/11/9 14:27
  */
 fun main() {
-    var str: String? = "test"
-    val caps = str.takeIf { it?.isNotEmpty() ?: false }?.uppercase()
+    var str: String? = "f"
+    val caps = str.takeIf { it == "s" }?.uppercase() ?: run {
+        "Test"
+    }
     println(caps)
 }
 

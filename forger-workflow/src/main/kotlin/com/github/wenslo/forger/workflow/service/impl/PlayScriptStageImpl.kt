@@ -5,6 +5,7 @@ import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
+import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordLogRepository
@@ -97,9 +98,14 @@ class PlayScriptStageImpl : PlayScriptStage {
                     message = executeResponse.message
                     hasReportFile = executeResponse.hasReportFile
                     link = executeResponse.link
+                    if (status == ExecuteStatus.SUCCEED || status == ExecuteStatus.ERROR) {
+                        endTime = LocalDateTime.now()
+                        finishFlag = IsFlag.YES
+                    }
                 }.also { log ->
                     recordLogRepository.save(log)
                 }
+
                 //TODO engine flow processing
             }
         }

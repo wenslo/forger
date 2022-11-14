@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.common
+package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin
 
 /**
  * @author wenhailin
