@@ -3,6 +3,7 @@ package com.github.wenslo.forger.workflow.service
 import com.github.wenslo.forger.data.jpa.service.LongIdService
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
 import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 
 /**
  * @author wenhailin
@@ -18,6 +19,13 @@ interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
     fun savePlayScriptAction(playScript: PlayScript)
 
     fun saveParamShuttles(playScript: PlayScript)
-    
+
     fun savePlayScriptParams(playScript: PlayScript)
+
+    fun actionMapByUniqueId(playScriptId: Long): Map<String, PlayScriptAction>
+
+    fun actionPreviousMap(playScriptId: Long): Map<String, List<String>>
+    fun actionNextMap(playScriptId: Long): Map<String, List<String>>
+
+    fun findNextEmpty(playScriptId: Long): List<String>
 }

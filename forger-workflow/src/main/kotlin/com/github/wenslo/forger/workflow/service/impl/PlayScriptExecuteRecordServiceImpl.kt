@@ -35,7 +35,7 @@ class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService,
         record.playScriptUniqueId = playScriptUniqueId
 
         // find first be executing actions and then populate
-        val actions = actionRepository.findByPreviousEmpty(true)
+        val actions = actionRepository.findByPreviousEmptyAndPlayScriptId(true, playScriptId)
         record.current = actions.map { it.uniqueId }.toList()
         this.recordRepository.save(record)
 

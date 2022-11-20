@@ -28,7 +28,7 @@ object GsonSingleton {
                     instance = GsonBuilder()
                         .registerTypeAdapter(
                             Date::class.java,
-                            JsonDeserializer { json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext? ->
+                            JsonDeserializer { json: JsonElement, _: Type?, _: JsonDeserializationContext? ->
                                 val asString = json.asString
                                 if (StringUtils.isBlank(asString)) {
                                     return@JsonDeserializer null
@@ -37,7 +37,7 @@ object GsonSingleton {
                             })
                         .registerTypeAdapter(
                             Int::class.java,
-                            JsonDeserializer<Int> { json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext? ->
+                            JsonDeserializer<Int> { json: JsonElement, _: Type?, _: JsonDeserializationContext? ->
                                 val asString = json.asString
                                 if (StringUtils.isBlank(asString)) {
                                     return@JsonDeserializer null
@@ -46,7 +46,7 @@ object GsonSingleton {
                             })
                         .registerTypeAdapter(
                             Long::class.java,
-                            JsonDeserializer<Long> { json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext? ->
+                            JsonDeserializer<Long> { json: JsonElement, _: Type?, _: JsonDeserializationContext? ->
                                 val asString = json.asString
                                 if (StringUtils.isBlank(asString)) {
                                     return@JsonDeserializer null

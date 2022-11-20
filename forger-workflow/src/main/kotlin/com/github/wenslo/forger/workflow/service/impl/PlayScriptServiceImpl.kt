@@ -14,6 +14,7 @@ import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.util.CollectionUtils
 import java.util.*
 
 /**
@@ -159,5 +160,41 @@ class PlayScriptServiceImpl : PlayScriptService,
         }.toList()
         playScriptParamRepository.saveAll(list)
 
+    }
+
+    override fun actionMapByUniqueId(playScriptId: Long): Map<String, PlayScriptAction> {
+        //TODO cache it
+        val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
+        if (CollectionUtils.isEmpty(actions)) {
+            return emptyMap()
+        }
+        return actions.associateBy { it.uniqueId }
+    }
+
+    override fun actionPreviousMap(playScriptId: Long): Map<String, List<String>> {
+        //TODO cache it
+        val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
+        if (CollectionUtils.isEmpty(actions)) {
+            return emptyMap()
+        }
+        return actions.associateBy(keySelector = { it.uniqueId }, valueTransform = { it.previous })
+    }
+
+    override fun actionNextMap(playScriptId: Long): Map<String, List<String>> {
+        //TODO cache it
+        val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
+        if (CollectionUtils.isEmpty(actions)) {
+            return emptyMap()
+        }
+        return actions.associateBy(keySelector = { it.uniqueId }, valueTransform = { it.next })
+    }
+
+    override fun findNextEmpty(playScriptId: Long): List<String> {
+        val list =
+            playScriptActionRepository.findByNextEmptyAndPlayScriptId(true, playScriptId)
+        if (list.isEmpty()) {
+            return emptyList()
+        }
+        return list.map { it.uniqueId }
     }
 }

@@ -1,9 +1,12 @@
 package com.github.wenslo.forger.workflow.service.impl
 
+import com.github.wenslo.forger.core.exceptions.BusinessException
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
+import com.github.wenslo.forger.workflow.domain.ExecutorResponse
 import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.IsFlag
@@ -105,12 +108,95 @@ class PlayScriptStageImpl : PlayScriptStage {
                 }.also { log ->
                     recordLogRepository.save(log)
                 }
-
-                //TODO engine flow processing
+                //engine flow processing
+                this.finishedHook(executeResponse, action, recordLog)
             }
         }
 
 
+    }
+
+    /**
+     * finished hook
+     */
+    private fun finishedHook(
+        executeResponse: ExecutorResponse,
+        action: PlayScriptAction,
+        recordLog: PlayScriptExecuteRecordLog
+    ) {
+        // previous actions check, status must be success, unless next action is threshold
+        // put action into redis, and redis go ahead sync play script state
+        when (executeResponse.status) {
+            ExecuteStatus.NONE -> {
+                throw BusinessException("execute response has wrong status")
+            }
+
+            ExecuteStatus.SUCCEED -> {
+                this.actionSucceedHandler(action, recordLog)
+            }
+
+            ExecuteStatus.ERROR -> {
+                this.actionErrorHandler(executeResponse, action)
+            }
+
+            ExecuteStatus.WAITING -> {
+                this.actionHasCallbackHandler(executeResponse, action)
+            }
+
+            ExecuteStatus.PARAMS_NOT_EXISTS -> {
+                this.actionParamsNotExistsHandler(executeResponse, action)
+            }
+
+            ExecuteStatus.THRESHOLD_NOT_PASS -> {
+                this.actionThresholdNotPassHandler(executeResponse, action)
+            }
+        }
+        //TODO
+
+    }
+
+    private fun actionThresholdNotPassHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
+        TODO("Not yet implemented")
+    }
+
+    private fun actionParamsNotExistsHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
+        TODO("Not yet implemented")
+    }
+
+    private fun actionHasCallbackHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
+        TODO("Not yet implemented")
+    }
+
+    private fun actionErrorHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
+        TODO("Not yet implemented")
+    }
+
+    private fun actionSucceedHandler(
+        action: PlayScriptAction,
+        recordLog: PlayScriptExecuteRecordLog
+    ) {
+        //find next action by current action, if these dependence are not all pass, waiting for another handler finished it
+        val actionMapByUniqueId = playScriptService.actionMapByUniqueId(action.playScriptId)
+        if (actionMapByUniqueId.isEmpty()) {
+            throw BusinessException("Engine has error")
+        }
+        actionMapByUniqueId[action.uniqueId]?.successFlag = IsFlag.YES
+        //TODO async
+
+        val next = action.next
+        if (next.isEmpty()) {
+            //check all finished
+            val previous = playScriptService.findNextEmpty(action.playScriptId)
+            val allFinished = previous.all { (actionMapByUniqueId[it]?.successFlag ?: IsFlag.NO) == IsFlag.YES }
+            if (allFinished) this.playScriptIsOver(recordLog)
+        } else {
+            //TODO
+            val previousMap = playScriptService.actionPreviousMap(action.playScriptId)
+        }
+    }
+
+    private fun playScriptIsOver(recordLog: PlayScriptExecuteRecordLog) {
+        TODO("Not yet implemented")
     }
 
     private fun generateRecordLog(ship: ExecuteShip, executorId: String): PlayScriptExecuteRecordLog {

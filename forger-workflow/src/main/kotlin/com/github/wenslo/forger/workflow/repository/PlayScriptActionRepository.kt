@@ -13,7 +13,11 @@ interface PlayScriptActionRepository : LongIdRepository<PlayScriptAction, Long> 
     /**
      * find previous is empty
      */
-    fun findByPreviousEmpty(emptyFlag: Boolean): List<PlayScriptAction>
+    fun findByPreviousEmptyAndPlayScriptId(emptyFlag: Boolean, playScriptId: Long): List<PlayScriptAction>
+
+    fun findByNextEmptyAndPlayScriptId(emptyFlag: Boolean, playScriptId: Long): List<PlayScriptAction>
 
     fun findTopByPlayScriptIdAndUniqueId(playScriptId: Long, uniqueId: String): PlayScriptAction?
+
+    fun findByPlayScriptId(playScriptId: Long): List<PlayScriptAction>
 }

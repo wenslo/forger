@@ -18,5 +18,6 @@ data class PlayScriptAction(
     var cycleFlag: IsFlag = IsFlag.NO,
     var cycleCount: Int = 1,
     var executorId: String = "",
-    var actionType: ActionType = ActionType.NORMAL
+    var actionType: ActionType = ActionType.NORMAL,
+    var successFlag: IsFlag = IsFlag.NO
 ) : LongIdEntity()
