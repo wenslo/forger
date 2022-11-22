@@ -25,6 +25,7 @@ interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
     fun actionMapByUniqueId(playScriptId: Long): Map<String, PlayScriptAction>
 
     fun actionPreviousMap(playScriptId: Long): Map<String, List<String>>
+
     fun actionNextMap(playScriptId: Long): Map<String, List<String>>
 
     fun findNextEmpty(playScriptId: Long): List<String>

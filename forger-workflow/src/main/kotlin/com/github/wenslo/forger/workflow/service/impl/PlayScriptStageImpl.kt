@@ -176,23 +176,44 @@ class PlayScriptStageImpl : PlayScriptStage {
         recordLog: PlayScriptExecuteRecordLog
     ) {
         //find next action by current action, if these dependence are not all pass, waiting for another handler finished it
-        val actionMapByUniqueId = playScriptService.actionMapByUniqueId(action.playScriptId)
-        if (actionMapByUniqueId.isEmpty()) {
+        val allMap = playScriptService.actionMapByUniqueId(action.playScriptId)
+        if (allMap.isEmpty()) {
             throw BusinessException("Engine has error")
         }
-        actionMapByUniqueId[action.uniqueId]?.successFlag = IsFlag.YES
+        allMap[action.uniqueId]?.successFlag = IsFlag.YES
         //TODO async
 
         val next = action.next
         if (next.isEmpty()) {
             //check all finished
             val previous = playScriptService.findNextEmpty(action.playScriptId)
-            val allFinished = previous.all { (actionMapByUniqueId[it]?.successFlag ?: IsFlag.NO) == IsFlag.YES }
+            val allFinished = previous.all { (allMap[it]?.successFlag ?: IsFlag.NO) == IsFlag.YES }
             if (allFinished) this.playScriptIsOver(recordLog)
         } else {
             //TODO
             val previousMap = playScriptService.actionPreviousMap(action.playScriptId)
+            for (actionUniqueId in next) {
+                val previous = previousMap[actionUniqueId]
+                if (previous?.isNotEmpty() == true) {
+                    val previousCheckPass = previous.all { allMap[it]?.successFlag == IsFlag.YES }
+                    if (previousCheckPass) flowToNext(actionUniqueId, recordLog)
+                } else {
+                    logger.error("The action hasn't previous action but at processing flow, error data!")
+                }
+            }
         }
+    }
+
+    private fun flowToNext(nextAction: String, recordLog: PlayScriptExecuteRecordLog) {
+
+        val ship = ExecuteShip().apply {
+            this.playScriptId = recordLog.playScriptId
+            this.playScriptUniqueId = recordLog.playScriptUniqueId
+            this.playScriptRecordId = recordLog.recordId
+            this.current = nextAction
+        }
+        logger.info("flow to next action, information is ${gson.toJson(ship)}")
+        actionProducerService.sendNow(ship)
     }
 
     private fun playScriptIsOver(recordLog: PlayScriptExecuteRecordLog) {
