@@ -10,5 +10,5 @@ import com.github.wenslo.forger.workflow.enums.ExecutorType
 data class TemplateAction(
     var templateId: Long = -1,
     var name: String = "",
-    var type: ExecutorType = ExecutorType.DUCK
+    var type: ExecutorType = ExecutorType.NONE
 ) : LongIdEntity()

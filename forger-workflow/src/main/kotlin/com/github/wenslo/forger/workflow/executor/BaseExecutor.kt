@@ -1,6 +1,7 @@
 package com.github.wenslo.forger.workflow.executor
 
 import com.github.wenslo.forger.workflow.domain.ActionDto
+import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
 import com.github.wenslo.forger.workflow.entity.ExecutorTemplateParam
 import com.github.wenslo.forger.workflow.entity.PlayScriptParam
@@ -20,6 +21,13 @@ abstract class BaseExecutor {
 
     @Autowired
     lateinit var playscriptParamRepository: PlayScriptParamRepository
+
+    open fun getExecutorId(): String {
+        return this.getResourceInfo().let {
+            it.name + it.versionNum
+        }
+    }
+
     open fun getTemplateDto(playScriptId: Long, executorId: String, actionUniqueId: String): ExecutorTemplateParam? {
         return templateParamRepository.findTopByPlayScriptIdAndActionExecutorIdAndActionUniqueId(
             playScriptId,
@@ -38,7 +46,7 @@ abstract class BaseExecutor {
 
     abstract fun getResourceInfo(): ActionDto
 
-    abstract fun execute(any: Any): ExecutorResponse
+    abstract fun execute(ship: ExecuteShip): ExecutorResponse
 
     abstract fun getOriginData(): Any
 

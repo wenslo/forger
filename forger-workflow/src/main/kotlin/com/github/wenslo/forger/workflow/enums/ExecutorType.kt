@@ -7,11 +7,15 @@ import com.github.wenslo.forger.core.domain.BaseEnum
  * @date 2022/10/25 09:17
  */
 enum class ExecutorType(private val code: Int, private val label: String) : BaseEnum {
-    DUCK(101100, "sonar qube scanner"),
-    SWAN(102100, "sonar qube server"),
+    NONE(-1, "Not implemented"),
+    SONAR_QUBE_SCANNER(101100, "sonar qube scanner"),
+    SONAR_QUBE_SERVER(102100, "sonar qube server"),
 
-    HORSE(103100, "source code analyzer"),
-    DONKEY(999100, "threshold");
+    SCA(103100, "source code analyzer"),
+
+    WORK_WEIXIN(104100, "Work Weixin"),
+
+    THRESHOLD(999100, "threshold");
 
     override fun code(): Int {
         return code

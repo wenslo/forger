@@ -94,7 +94,7 @@ class PlayScriptStageImpl : PlayScriptStage {
                 logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
                 //record log generate
                 val recordLog = generateRecordLog(ship, it.executorId)
-                val executeResponse = executor.execute(Any())
+                val executeResponse = executor.execute(ship)
                 //populate record log information
                 recordLog.apply {
                     status = executeResponse.status
@@ -205,7 +205,6 @@ class PlayScriptStageImpl : PlayScriptStage {
     }
 
     private fun flowToNext(nextAction: String, recordLog: PlayScriptExecuteRecordLog) {
-
         val ship = ExecuteShip().apply {
             this.playScriptId = recordLog.playScriptId
             this.playScriptUniqueId = recordLog.playScriptUniqueId
