@@ -10,6 +10,8 @@ import com.github.wenslo.forger.workflow.executor.BaseExecutor
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWeixinToken
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWeixinActionReq
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWeixinTemplateDto
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
+import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.springframework.stereotype.Component
 import java.io.File
 
@@ -19,6 +21,10 @@ import java.io.File
  */
 @Component
 class WorkWxExecutor : BaseExecutor() {
+
+    companion object {
+        const val TOKEN_URL = "http://127.0.0.1:5000/gettoken"
+    }
 
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
@@ -43,15 +49,17 @@ class WorkWxExecutor : BaseExecutor() {
             )
         val templateDto = templateParam.params as WorkWeixinTemplateDto
         val actionDto = actionParam.params as WorkWeixinActionReq
-        val token = getWorkWeixinToken(templateDto, actionDto)
+        val token = getWorkWeixinToken(templateDto)
         //return executed response
         return ExecutorResponse()
     }
 
     private fun getWorkWeixinToken(
-        templateDto: WorkWeixinTemplateDto,
-        actionDto: WorkWeixinActionReq
+        templateDto: WorkWeixinTemplateDto
     ): WorkWeixinToken {
+        val requestUrl = TOKEN_URL+"?corpid=${templateDto.corpId}&corpsecret=${templateDto.appSecret}"
+        //TODO register to bean and use pool management
+        val httpClient: CloseableHttpClient = HttpClients.createDefault()
 
         return WorkWeixinToken()
     }

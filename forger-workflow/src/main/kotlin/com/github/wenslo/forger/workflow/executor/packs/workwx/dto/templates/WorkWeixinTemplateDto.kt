@@ -11,11 +11,11 @@ import com.github.wenslo.forger.workflow.enums.TemplateType
 @TemplateUse(TemplateType.WORK_WEIXIN)
 data class WorkWeixinTemplateDto(
     @FieldDefine(
-        describe = "crop_id",
+        describe = "corp_id",
         len = 500,
         sortNum = 1
     )
-    var cropId: String = "",
+    var corpId: String = "",
     @FieldDefine(
         describe = "agent_id",
         sortNum = 2
