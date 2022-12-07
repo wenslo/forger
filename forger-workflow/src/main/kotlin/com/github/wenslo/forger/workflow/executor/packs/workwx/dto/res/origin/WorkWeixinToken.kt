@@ -11,4 +11,4 @@ data class WorkWeixinToken(
     var accessToken: String = "",
     @SerializedName("expires_in")
     var expiresIn: Int = 0,
-)
+) : WorkWeixinBaseRes()

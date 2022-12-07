@@ -128,7 +128,7 @@ class PlayScriptStageImpl : PlayScriptStage {
         // put action into redis, and redis go ahead sync play script state
         when (executeResponse.status) {
             ExecuteStatus.NONE -> {
-                throw BusinessException("execute response has wrong status")
+                throw BusinessException("Executed response has wrong status")
             }
 
             ExecuteStatus.SUCCEED -> {

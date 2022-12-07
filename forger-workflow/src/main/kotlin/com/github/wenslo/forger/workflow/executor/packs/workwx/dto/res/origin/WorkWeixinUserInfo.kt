@@ -8,7 +8,7 @@ data class WorkWeixinUserInfo(
     var userId: String = "",
     var username: String = "",
     var department: List<Int> = emptyList()
-)
+) : WorkWeixinBaseRes()
 
 data class WorkWeixinUser(
     var userList: List<WorkWeixinUserInfo> = emptyList()

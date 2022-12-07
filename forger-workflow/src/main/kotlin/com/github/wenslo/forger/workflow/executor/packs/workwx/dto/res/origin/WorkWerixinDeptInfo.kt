@@ -7,7 +7,7 @@ package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin
 data class WorkWerixinDeptInfo(
     var id: Int = 0,
     var name: String = ""
-)
+) : WorkWeixinBaseRes()
 
 data class WorkWeixinDept(
     var department: List<WorkWerixinDeptInfo> = emptyList()
