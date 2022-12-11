@@ -106,8 +106,6 @@ class PlayScriptStageImpl : PlayScriptStage {
                         endTime = LocalDateTime.now()
                         finishFlag = IsFlag.YES
                     }
-                }.also { log ->
-                    recordLogRepository.save(log)
                 }
                 //engine flow processing
                 this.finishedHook(executeResponse, action, recordLog)
@@ -137,39 +135,50 @@ class PlayScriptStageImpl : PlayScriptStage {
             }
 
             ExecuteStatus.ERROR -> {
-                this.actionErrorHandler(executeResponse, action)
+                this.actionErrorHandler(executeResponse, recordLog)
             }
 
             ExecuteStatus.WAITING -> {
-                this.actionHasCallbackHandler(executeResponse, action)
+                this.actionHasCallbackHandler(executeResponse, recordLog)
             }
 
             ExecuteStatus.PARAMS_NOT_EXISTS -> {
-                this.actionParamsNotExistsHandler(executeResponse, action)
+                this.actionParamsNotExistsHandler(executeResponse, recordLog)
             }
 
             ExecuteStatus.THRESHOLD_NOT_PASS -> {
-                this.actionThresholdNotPassHandler(executeResponse, action)
+                this.actionThresholdNotPassHandler(executeResponse, recordLog)
             }
         }
-        //TODO
+        recordLogRepository.save(recordLog)
+    }
+
+    private fun actionThresholdNotPassHandler(
+        executeResponse: ExecutorResponse,
+        recordLog: PlayScriptExecuteRecordLog
+    ) {
+        recordLog.status = executeResponse.status
+        recordLog.message = "Action isn't pass by threshold"
 
     }
 
-    private fun actionThresholdNotPassHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
-        TODO("Not yet implemented")
+    private fun actionParamsNotExistsHandler(executeResponse: ExecutorResponse, recordLog: PlayScriptExecuteRecordLog) {
+        recordLog.status = executeResponse.status
+        recordLog.message = "Action parameters isn't exists"
     }
 
-    private fun actionParamsNotExistsHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
-        TODO("Not yet implemented")
+    private fun actionHasCallbackHandler(executeResponse: ExecutorResponse, recordLog: PlayScriptExecuteRecordLog) {
+        recordLog.status = executeResponse.status
+        recordLog.message = "Action hasn't callback, waiting..."
+        //TODO put mq to waiting
     }
 
-    private fun actionHasCallbackHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
-        TODO("Not yet implemented")
-    }
-
-    private fun actionErrorHandler(executeResponse: ExecutorResponse, action: PlayScriptAction) {
-        TODO("Not yet implemented")
+    private fun actionErrorHandler(
+        executeResponse: ExecutorResponse,
+        recordLog: PlayScriptExecuteRecordLog
+    ) {
+        recordLog.status = executeResponse.status
+        recordLog.message = executeResponse.message
     }
 
     private fun actionSucceedHandler(
