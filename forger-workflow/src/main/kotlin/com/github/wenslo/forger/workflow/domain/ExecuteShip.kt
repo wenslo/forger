@@ -8,5 +8,6 @@ data class ExecuteShip(
     var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",
     var playScriptRecordId: Long = 0L,
+    var recordLogId: Long = 0,
     var current: String = "",
 )

@@ -5,9 +5,9 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
+import com.github.wenslo.forger.workflow.entity.ExecutorActionParam
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptAction
-import com.github.wenslo.forger.workflow.entity.PlayScriptParam
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.repository.*
 import com.github.wenslo.forger.workflow.service.PlayScriptService
@@ -45,7 +45,7 @@ class PlayScriptServiceImpl : PlayScriptService,
     lateinit var playScriptActionShuttleRepository: PlayScriptActionShuttleRepository
 
     @Autowired
-    lateinit var playScriptParamRepository: PlayScriptParamRepository
+    lateinit var executorActionParamRepository: ExecutorActionParamRepository
 
     @Autowired
     lateinit var executeFactory: ExecuteFactory
@@ -150,7 +150,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         val executorIdMap = playScript.nodes.associateBy({ it.uniqueId }, { it.executorId })
         val list = params.entries.map {
             val actionUniqueId = it.key
-            PlayScriptParam().apply {
+            ExecutorActionParam().apply {
                 this.playScriptId = playScriptId ?: 0
                 this.playScriptUniqueId = playScriptUniqueId
                 this.actionUniqueId = actionUniqueId
@@ -158,7 +158,7 @@ class PlayScriptServiceImpl : PlayScriptService,
                 this.params = it.value
             }
         }.toList()
-        playScriptParamRepository.saveAll(list)
+        executorActionParamRepository.saveAll(list)
 
     }
 

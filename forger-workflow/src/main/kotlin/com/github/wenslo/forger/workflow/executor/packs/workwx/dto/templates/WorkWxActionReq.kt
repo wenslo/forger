@@ -10,7 +10,7 @@ import com.github.wenslo.forger.workflow.enums.TemplateType
  * @date 2022/11/27 14:31
  */
 @ActionRequest(templateType = TemplateType.WORK_WEIXIN, executorType = ExecutorType.WORK_WEIXIN)
-data class WorkWeixinActionReq(
+data class WorkWxActionReq(
     @FieldDefine(
         describe = "user_id",
         sortNum = 1

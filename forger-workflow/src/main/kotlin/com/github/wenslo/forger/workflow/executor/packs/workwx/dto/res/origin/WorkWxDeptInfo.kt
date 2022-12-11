@@ -4,11 +4,11 @@ package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin
  * @author wenhailin
  * @date 2022/11/11 09:58
  */
-data class WorkWerixinDeptInfo(
+data class WorkWxDeptInfo(
     var id: Int = 0,
     var name: String = ""
-) : WorkWeixinBaseRes()
+) : WorkWxBaseRes()
 
-data class WorkWeixinDept(
-    var department: List<WorkWerixinDeptInfo> = emptyList()
+data class WorkWxDept(
+    var department: List<WorkWxDeptInfo> = emptyList()
 )

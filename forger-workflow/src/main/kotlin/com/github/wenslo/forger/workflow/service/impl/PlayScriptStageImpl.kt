@@ -94,6 +94,7 @@ class PlayScriptStageImpl : PlayScriptStage {
                 logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
                 //record log generate
                 val recordLog = generateRecordLog(ship, it.executorId)
+                ship.recordLogId = recordLog.id ?: 0
                 val executeResponse = executor.execute(ship)
                 //populate record log information
                 recordLog.apply {

@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
  * @author wenhailin
  * @date 2022/11/11 09:55
  */
-data class WorkWeixinToken(
+data class WorkWxToken(
     @SerializedName("access_token")
     var accessToken: String = "",
     @SerializedName("expires_in")
     var expiresIn: Int = 0,
-) : WorkWeixinBaseRes()
+) : WorkWxBaseRes()

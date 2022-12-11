@@ -9,7 +9,7 @@ import com.github.wenslo.forger.workflow.enums.TemplateType
  * @date 2022/11/14 09:51
  */
 @TemplateUse(TemplateType.WORK_WEIXIN)
-data class WorkWeixinTemplateDto(
+data class WorkWxTemplateDto(
     @FieldDefine(
         describe = "corp_id",
         len = 500,
