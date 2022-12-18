@@ -122,13 +122,15 @@ class HttpClientConfig {
             try {
                 if (connectionManager != null) {
                     logger.trace("run IdleConnectionMonitor - Closing expired and idle connections...")
-                    connectionManager.closeExpired()
-                    connectionManager.closeIdle(TimeValue.ofSeconds(CLOSE_IDLE_CONNECTION_WAIT_TIME_SECS.toLong()))
+                    connectionManager.run {
+                        closeExpired()
+                        closeIdle(TimeValue.ofSeconds(CLOSE_IDLE_CONNECTION_WAIT_TIME_SECS.toLong()))
+                    }
                 } else {
                     logger.trace("run IdleConnectionMonitor - Http Client Connection manager is not initialised")
                 }
             } catch (e: Exception) {
-                logger.error("run IdleConnectionMonitor - Exception occurred. msg={}, e={}", e.message, e)
+                logger.error("run IdleConnectionMonitor - Exception occurred. msg={}", e.message, e)
             }
         }
     }

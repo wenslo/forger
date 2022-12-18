@@ -128,6 +128,7 @@ project(":forger-workflow") {
         implementation(group = "org.springframework.boot", name = "spring-boot-starter-data-mongodb")
         implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.1.1")
         implementation("commons-io:commons-io:2.11.0")
+        implementation("org.reflections:reflections:0.10.2")
         runtimeOnly(group = "com.h2database", name = "h2")
     }
 }

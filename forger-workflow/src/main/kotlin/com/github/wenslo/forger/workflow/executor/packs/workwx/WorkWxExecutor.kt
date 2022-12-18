@@ -42,7 +42,7 @@ class WorkWxExecutor : BaseExecutor() {
         const val TOKEN_URL = "http://127.0.0.1:5000/gettoken"
         const val SEND_URL = "http://127.0.0.1:5000/send"
         const val GET_USER_URL = "http://127.0.0.1:5000/getuser"
-        val logger = getLogger<WorkWxExecutor>()
+        private val logger = getLogger<WorkWxExecutor>()
     }
 
     @Autowired
