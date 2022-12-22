@@ -130,6 +130,8 @@ project(":forger-workflow") {
         implementation("commons-io:commons-io:2.11.0")
         implementation("org.reflections:reflections:0.10.2")
         runtimeOnly(group = "com.h2database", name = "h2")
+        implementation("mysql:mysql-connector-java:8.0.13")
+
     }
 }
 

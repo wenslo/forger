@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%date{yyyy-MM-dd HH:mm:ss}  | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS}  %-5level %logger Line:%-3L - %msg%n"/>
+    <!--    <include resource="secret.xml"/>-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- product -->
+    <springProfile name="pro">
+        <logger name="com.github.wenslo.archetypes" level="debug"/>
+        <logger name="org.springframework" level="warn"/>
+        <logger name="com.zaxxer" level="info"/>
+        <logger name="org.hibernate" level="warn"/>
+        <logger name="org.mongodb" level="info"/>
+        <logger name="org.apache" level="warn"/>
+        <logger name="com.querydsl.jpa.impl.JPAQuery" level="error"/>
+        <logger name="org.reflections.Reflections" level="error"/>
+        <logger name="io.lettuce" level="warn"/>
+        <root level="DEBUG">
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- developer -->
+    <springProfile name="dev,test">
+        <logger name="com.github.wenslo.archetypes.controller" level="INFO">
+            <appender-ref ref="MONGO"/>
+        </logger>
+        <logger name="com.github.wenslo.archetypes.security" level="INFO">
+            <appender-ref ref="MONGO"/>
+        </logger>
+        <logger name="org.springframework" level="warn"/>
+        <logger name="com.zaxxer" level="info"/>
+        <logger name="org.hibernate" level="warn"/>
+        <logger name="org.mongodb" level="info"/>
+        <logger name="org.apache" level="warn"/>
+        <logger name="org.hibernate.SQL" level="error"/>
+        <logger name="org.hibernate.type.descriptor.sql" level="error"/>
+        <logger name="com.querydsl.jpa.impl.JPAQuery" level="info"/>
+        <logger name="org.reflections.Reflections" level="error"/>
+        <logger name="org.redisson" level="error"/>
+        <logger name="io.netty" level="error"/>
+        <logger name="io.lettuce" level="warn"/>
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+</configuration>
+
