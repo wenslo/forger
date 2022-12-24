@@ -43,12 +43,6 @@
 
     <!-- developer -->
     <springProfile name="dev,test">
-        <logger name="com.github.wenslo.archetypes.controller" level="INFO">
-            <appender-ref ref="MONGO"/>
-        </logger>
-        <logger name="com.github.wenslo.archetypes.security" level="INFO">
-            <appender-ref ref="MONGO"/>
-        </logger>
         <logger name="org.springframework" level="warn"/>
         <logger name="com.zaxxer" level="info"/>
         <logger name="org.hibernate" level="warn"/>

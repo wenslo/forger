@@ -26,10 +26,10 @@ spring:
         format_sql: false
   data:
     mongodb:
-      host: 192.168.11.1
+      host: 127.0.0.1
       port: 27017
       database: workflow
   activemq:
-    broker-url: tcp://192.168.11.1:61616
+    broker-url: tcp://127.0.0.1:61616
     user: admin
     password: admin

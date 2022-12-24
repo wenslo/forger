@@ -4,11 +4,13 @@ import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import java.time.LocalDateTime
+import javax.persistence.Entity
 
 /**
  * @author wenhailin
  * @date 2022/10/27 10:55
  */
+@Entity
 data class PlayScriptExecuteRecordLog(
     var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",

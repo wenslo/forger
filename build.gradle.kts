@@ -39,6 +39,8 @@ subprojects {
         plugin("org.jetbrains.kotlin.kapt")
     }
     dependencies {
+        implementation(kotlin("stdlib-jdk8"))
+        kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
     }
     val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
     compileKotlin.kotlinOptions {
@@ -48,7 +50,6 @@ subprojects {
     compileTestKotlin.kotlinOptions {
         jvmTarget = "17"
     }
-
 
     tasks {
         jar {
@@ -127,10 +128,13 @@ project(":forger-workflow") {
         implementation(group = "org.springframework.boot", name = "spring-boot-starter-activemq")
         implementation(group = "org.springframework.boot", name = "spring-boot-starter-data-mongodb")
         implementation(group = "org.apache.httpcomponents.client5", name = "httpclient5", version = "5.1.1")
+        implementation(group = "com.querydsl", name = "querydsl-jpa", version = "5.0.0")
+        implementation(group = "com.querydsl", name = "querydsl-apt", version = "5.0.0")
         implementation("commons-io:commons-io:2.11.0")
         implementation("org.reflections:reflections:0.10.2")
         runtimeOnly(group = "com.h2database", name = "h2")
         implementation("mysql:mysql-connector-java:8.0.13")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
     }
 }
@@ -139,8 +143,8 @@ project(":forger-hbase") {
     dependencies {
         implementation("org.apache.hbase:hbase-client:2.5.0")
         implementation("org.apache.hbase:hbase:2.5.0")
-        compileOnly("org.apache.hadoop:hadoop-client:3.3.4")
         implementation("org.apache.hadoop:hadoop-common:3.3.4")
+        compileOnly("org.apache.hadoop:hadoop-client:3.3.4")
 
     }
 }

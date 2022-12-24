@@ -2,11 +2,13 @@ package com.github.wenslo.forger.workflow.entity
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.IsFlag
+import javax.persistence.Entity
 
 /**
  * @author wenhailin
  * @date 2022/10/27 09:05
  */
+@Entity
 data class PlayScriptNode(
     var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",

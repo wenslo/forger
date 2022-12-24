@@ -102,8 +102,8 @@ class PlayScriptServiceImpl : PlayScriptService,
         if (nodes.isEmpty()) {
             return
         }
-        val fromMap = playScript.lines.groupBy(keySelector = { it.from }, valueTransform = { it.to })
-        val toMap = playScript.lines.groupBy(keySelector = { it.to }, valueTransform = { it.from })
+        val fromMap = playScript.lines.groupBy(keySelector = { it.sourceNodeId }, valueTransform = { it.targetNodeId })
+        val toMap = playScript.lines.groupBy(keySelector = { it.targetNodeId }, valueTransform = { it.sourceNodeId })
         val actions = nodes.map {
             val uniqueId = it.uniqueId
             PlayScriptAction().apply {
@@ -191,7 +191,7 @@ class PlayScriptServiceImpl : PlayScriptService,
 
     override fun findNextEmpty(playScriptId: Long): List<String> {
         val list =
-            playScriptActionRepository.findByNextEmptyAndPlayScriptId(true, playScriptId)
+            playScriptActionRepository.findByNextEmptyAndPlayScriptId(playScriptId)
         if (list.isEmpty()) {
             return emptyList()
         }
