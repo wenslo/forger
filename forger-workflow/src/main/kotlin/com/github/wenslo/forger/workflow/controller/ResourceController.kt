@@ -2,9 +2,12 @@ package com.github.wenslo.forger.workflow.controller
 
 import com.github.wenslo.forger.core.domain.Response
 import com.github.wenslo.forger.core.inline.getLogger
+import com.github.wenslo.forger.workflow.cache.InitListener.Companion.actionReqFieldMap
+import com.github.wenslo.forger.workflow.cache.InitListener.Companion.actionResFieldMap
 import com.github.wenslo.forger.workflow.cache.InitListener.Companion.templateFieldMap
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
 import com.github.wenslo.forger.workflow.entity.Template
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.service.TemplateService
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,15 +52,13 @@ class ResourceController {
 
 
     @GetMapping("action/request/fields")
-    fun queryRequestFields(): Response {
-        //List<FieldDto>
-        return Response.SUCCESS
+    fun queryRequestFields(executorType: ExecutorType): Response {
+        return Response.success(actionReqFieldMap[executorType])
     }
 
     @GetMapping("action/response/fields")
-    fun queryResponseFields(): Response {
-        //List<FieldDto>
-        return Response.SUCCESS
+    fun queryResponseFields(executorType: ExecutorType): Response {
+        return Response.success(actionResFieldMap[executorType])
     }
 
 }
