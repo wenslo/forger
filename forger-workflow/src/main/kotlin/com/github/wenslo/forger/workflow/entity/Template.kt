@@ -1,10 +1,12 @@
 package com.github.wenslo.forger.workflow.entity
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
+import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.enums.TemplateType
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.Transient
 
 /**
  * @author wenhailin
@@ -18,5 +20,7 @@ data class Template(
     var author: String = "",
     @Enumerated(EnumType.STRING)
     var type: TemplateType = TemplateType.SCA,
-    var sortNum: String = ""
+    var sortNum: String = "",
+    @Transient
+    var fields: List<FieldDto>? = emptyList()
 ) : LongIdEntity()

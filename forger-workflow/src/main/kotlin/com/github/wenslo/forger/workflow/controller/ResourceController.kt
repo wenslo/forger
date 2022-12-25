@@ -4,12 +4,11 @@ import com.github.wenslo.forger.core.domain.Response
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.InitListener.Companion.templateFieldMap
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
+import com.github.wenslo.forger.workflow.entity.Template
 import com.github.wenslo.forger.workflow.service.TemplateService
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * @author wenhailin
@@ -36,6 +35,11 @@ class ResourceController {
     @GetMapping("template/request/fields")
     fun queryTemplateRequestFields(condition: TemplateActionCondition): Response {
         return Response.success(templateFieldMap[condition.templateType])
+    }
+
+    @PostMapping("template/install")
+    fun install(@RequestBody template: Template): Response {
+        return Response.success(templateService.install(template))
     }
 
     @GetMapping("action")

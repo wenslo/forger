@@ -2,14 +2,15 @@ package com.github.wenslo.forger.workflow.config
 
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
+import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
-import com.mongodb.client.MongoDatabase
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.BeanCreationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
+import org.springframework.data.mongodb.core.MongoTemplate
 
 /**
  * @author wenhailin
@@ -21,10 +22,10 @@ class MongoConfig {
     lateinit var environment: Environment
 
     @Bean
-    fun mongoClient(): MongoDatabase {
+    fun mongoClient(): MongoClient {
         val host = environment.getProperty("spring.data.mongodb.host") ?: ""
         val port = environment.getProperty("spring.data.mongodb.port") ?: ""
-        val database = environment.getProperty("spring.data.mongodb.database") ?: ""
+
         if (StringUtils.isBlank(host) || StringUtils.isBlank(port)) {
             throw BeanCreationException("spring.data.mongodb host or port is null!")
         }
@@ -32,10 +33,15 @@ class MongoConfig {
         val settings = MongoClientSettings.builder()
             .applyConnectionString(ConnectionString(uri))
             .build()
-        val mongoClient = MongoClients.create(settings)
+        return MongoClients.create(settings)
+    }
+
+    @Bean
+    fun mongoTemplate(): MongoTemplate {
+        val database = environment.getProperty("spring.data.mongodb.database") ?: ""
         if (StringUtils.isBlank(database)) {
             throw BeanCreationException("spring.data.mongodb database is null!")
         }
-        return mongoClient.getDatabase(database)
+        return MongoTemplate(mongoClient(), database)
     }
 }

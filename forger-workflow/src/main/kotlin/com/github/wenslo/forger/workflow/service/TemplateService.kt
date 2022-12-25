@@ -12,4 +12,6 @@ import com.github.wenslo.forger.workflow.entity.TemplateAction
  */
 interface TemplateService : LongIdService<Template, TemplateCondition> {
     fun findByTemplateId(condition: TemplateActionCondition): List<TemplateAction>
+
+    fun install(template: Template): Long
 }

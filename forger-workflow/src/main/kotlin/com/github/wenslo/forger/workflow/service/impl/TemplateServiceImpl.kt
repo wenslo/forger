@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.workflow.service.impl
 
+import com.github.wenslo.forger.core.exceptions.BusinessException
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
 import com.github.wenslo.forger.workflow.condition.TemplateCondition
@@ -9,8 +10,12 @@ import com.github.wenslo.forger.workflow.repository.TemplateActionRepository
 import com.github.wenslo.forger.workflow.repository.TemplateRepository
 import com.github.wenslo.forger.workflow.service.TemplateService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 /**
  * @author wenhailin
@@ -21,7 +26,30 @@ import org.springframework.transaction.annotation.Transactional
 class TemplateServiceImpl : TemplateService, LongIdServiceImpl<Template, TemplateCondition, TemplateRepository>() {
     @Autowired
     lateinit var templateActionRepository: TemplateActionRepository
+
+    @Autowired
+    lateinit var mongoTemplate: MongoTemplate
     override fun findByTemplateId(condition: TemplateActionCondition): List<TemplateAction> {
         return templateActionRepository.findByTemplateId(condition.templateId) ?: emptyList()
+    }
+
+    @Transactional(readOnly = false)
+    override fun install(template: Template): Long {
+        if (template.id == null) {
+            throw BusinessException("Parameter error")
+        }
+        val reference = repository.getReferenceById(template.id!!)
+        reference.fields = template.fields
+        val query = Query()
+        query.addCriteria(Criteria.where("_id").`is`(reference.id))
+        val record = mongoTemplate.findOne(query, Template::class.java)
+        val collectionName = "template"
+        if (Objects.isNull(record)) {
+            mongoTemplate.save(reference, collectionName)
+        } else {
+            mongoTemplate.remove(query, Template::class.java, collectionName)
+            mongoTemplate.save(reference, collectionName)
+        }
+        return -1
     }
 }
