@@ -4,7 +4,7 @@ spring:
       filter:
         enabled: true
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/web_archetypes_kotlin?characterEncoding=UTF-8&useUnicode=true&useSSL=false&&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/workflow?characterEncoding=UTF-8&useUnicode=true&useSSL=false&&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root1@123

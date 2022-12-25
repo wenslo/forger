@@ -70,7 +70,7 @@ class InitListener : ApplicationRunner {
     }
 
     private fun templateUseHandler(clazz: Class<out ParamCacheable?>, templateUse: TemplateUse) {
-        val list: List<FieldDto> = this.getFieldDtos(clazz.declaredFields)
+        val list: List<FieldDto> = this.getFieldDtoList(clazz.declaredFields)
         if (list.isEmpty()) {
             return
         }
@@ -80,7 +80,7 @@ class InitListener : ApplicationRunner {
     }
 
     private fun actionResponseHandler(clazz: Class<out ParamCacheable?>, actionResponse: ActionResponse) {
-        val list: List<FieldDto> = this.getFieldDtos(clazz.declaredFields)
+        val list: List<FieldDto> = this.getFieldDtoList(clazz.declaredFields)
         this.actionMapHandler(
             list,
             actionResFieldMap,
@@ -92,7 +92,7 @@ class InitListener : ApplicationRunner {
     }
 
     private fun actionRequestHandler(clazz: Class<out ParamCacheable?>, actionRequest: ActionRequest) {
-        val list: List<FieldDto> = this.getFieldDtos(clazz.declaredFields)
+        val list: List<FieldDto> = this.getFieldDtoList(clazz.declaredFields)
         this.actionMapHandler(
             list,
             actionReqFieldMap,
@@ -123,7 +123,7 @@ class InitListener : ApplicationRunner {
 
     }
 
-    private fun getFieldDtos(declaredFields: Array<Field>): List<FieldDto> {
+    private fun getFieldDtoList(declaredFields: Array<Field>): List<FieldDto> {
         val list = mutableListOf<FieldDto>()
         for (field in declaredFields) {
             val fieldDefine = field.getAnnotation(FieldDefine::class.java) ?: continue

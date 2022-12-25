@@ -5,6 +5,8 @@ import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import java.time.LocalDateTime
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 /**
  * @author wenhailin
@@ -19,10 +21,14 @@ data class PlayScriptExecuteRecordLog(
     var executorId: String = "",
     var beginTime: LocalDateTime = LocalDateTime.now(),
     var endTime: LocalDateTime = LocalDateTime.MIN,
+    @Enumerated(EnumType.STRING)
     var finishFlag: IsFlag = IsFlag.NO,
+    @Enumerated(EnumType.STRING)
     var executeFlag: IsFlag = IsFlag.NO,
+    @Enumerated(EnumType.STRING)
     var status: ExecuteStatus = ExecuteStatus.SUCCEED,
     var message: String = "",
+    @Enumerated(EnumType.STRING)
     var hasReportFile: IsFlag = IsFlag.NO,
     var link: String = ""
 ) : LongIdEntity()

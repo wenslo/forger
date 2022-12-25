@@ -3,6 +3,8 @@ package com.github.wenslo.forger.workflow.entity
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 /**
  * @author wenhailin
@@ -19,5 +21,6 @@ data class PlayScriptNode(
     var vertical: String = "",
     var ico: String = "",
     var state: String = "",
+    @Enumerated(EnumType.STRING)
     var triggerFlag: IsFlag = IsFlag.NO
 ) : LongIdEntity()

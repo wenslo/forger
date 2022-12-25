@@ -8,7 +8,7 @@ import com.github.wenslo.forger.workflow.enums.IsFlag
  * @date 2022/11/14 10:04
  */
 @Target(AnnotationTarget.FIELD)
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 annotation class FieldDefine(
     val describe: String,

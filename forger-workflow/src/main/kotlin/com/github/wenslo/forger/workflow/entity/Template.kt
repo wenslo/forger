@@ -3,6 +3,8 @@ package com.github.wenslo.forger.workflow.entity
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.TemplateType
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 /**
  * @author wenhailin
@@ -14,6 +16,7 @@ data class Template(
     var templateVersion: String = "",
     var description: String = "",
     var author: String = "",
+    @Enumerated(EnumType.STRING)
     var type: TemplateType = TemplateType.SCA,
     var sortNum: String = ""
 ) : LongIdEntity()
