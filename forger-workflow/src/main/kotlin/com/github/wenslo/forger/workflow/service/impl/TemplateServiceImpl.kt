@@ -25,10 +25,24 @@ import java.util.*
 @Transactional(readOnly = true)
 class TemplateServiceImpl : TemplateService, LongIdServiceImpl<Template, TemplateCondition, TemplateRepository>() {
     @Autowired
+    lateinit var templateRepository: TemplateRepository
+
+    @Autowired
     lateinit var templateActionRepository: TemplateActionRepository
 
     @Autowired
     lateinit var mongoTemplate: MongoTemplate
+    override fun findAllTemplate(): List<Template> {
+        val templates = templateRepository.findAll()
+        templates.forEach {
+            val query = Query()
+            query.addCriteria(Criteria.where("_id").`is`(it.id))
+            val record = mongoTemplate.findOne(query, Template::class.java)
+            it.fields = record?.fields
+        }
+        return templates
+    }
+
     override fun findByTemplateId(condition: TemplateActionCondition): List<TemplateAction> {
         return templateActionRepository.findByTemplateId(condition.templateId) ?: emptyList()
     }
@@ -50,6 +64,6 @@ class TemplateServiceImpl : TemplateService, LongIdServiceImpl<Template, Templat
             mongoTemplate.remove(query, Template::class.java, collectionName)
             mongoTemplate.save(reference, collectionName)
         }
-        return -1
+        return record?.id ?: -1
     }
 }

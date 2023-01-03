@@ -32,7 +32,7 @@ class ResourceController {
 
     @GetMapping("template")
     fun queryTemplate(): Response {
-        return Response.success(templateService.getAll())
+        return Response.success(templateService.findAllTemplate())
     }
 
     @GetMapping("template/request/fields")

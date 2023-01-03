@@ -1,0 +1,35 @@
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/workflow?characterEncoding=UTF-8&useUnicode=true&useSSL=false&&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: wenhailin
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      connection-test-query: SELECT 1
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: false
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: workflow
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    user: admin
+    password: admin

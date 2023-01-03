@@ -42,7 +42,7 @@
     </springProfile>
 
     <!-- developer -->
-    <springProfile name="dev,test">
+    <springProfile name="wen,dev,test">
         <logger name="org.springframework" level="warn"/>
         <logger name="com.zaxxer" level="info"/>
         <logger name="org.hibernate" level="warn"/>

@@ -4,4 +4,4 @@ spring:
   application:
     name: workflow
   profiles:
-    active: dev
+    active: wen
