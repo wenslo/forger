@@ -14,5 +14,6 @@ interface TemplateService : LongIdService<Template, TemplateCondition> {
     fun findAllTemplate(): List<Template>
 
     fun findByTemplateId(condition: TemplateActionCondition): List<TemplateAction>
+
     fun install(template: Template): Long
 }

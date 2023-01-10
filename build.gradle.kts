@@ -135,7 +135,7 @@ project(":forger-workflow") {
         runtimeOnly(group = "com.h2database", name = "h2")
         implementation("mysql:mysql-connector-java:8.0.13")
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-
+        implementation("cn.hutool:hutool-all:5.8.11")
     }
 }
 
