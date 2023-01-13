@@ -52,7 +52,7 @@ class PlayScriptStageImpl : PlayScriptStage {
     @Autowired
     lateinit var recordLogRepository: PlayScriptExecuteRecordLogRepository
 
-
+    @Suppress("UNCHECKED_CAST")
     override fun paramValid(playScript: PlayScript) {
         for (fieldDtoList in playScript.params.values) {
             FieldValidUtil.valid(fieldDtoList as List<FieldDto>)
