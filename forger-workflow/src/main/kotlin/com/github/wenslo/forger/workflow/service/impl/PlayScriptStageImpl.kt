@@ -5,6 +5,7 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
+import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
@@ -16,6 +17,7 @@ import com.github.wenslo.forger.workflow.service.ActionProducerService
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
+import com.github.wenslo.forger.workflow.utils.FieldValidUtil
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -52,7 +54,9 @@ class PlayScriptStageImpl : PlayScriptStage {
 
 
     override fun paramValid(playScript: PlayScript) {
-        TODO("Not yet implemented")
+        for (fieldDtoList in playScript.params.values) {
+            FieldValidUtil.valid(fieldDtoList as List<FieldDto>)
+        }
     }
 
     override fun run(playScript: PlayScript) {
