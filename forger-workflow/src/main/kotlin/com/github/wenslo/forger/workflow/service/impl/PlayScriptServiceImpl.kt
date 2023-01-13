@@ -5,13 +5,15 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
-import com.github.wenslo.forger.workflow.entity.ExecutorActionParam
-import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptAction
+import com.github.wenslo.forger.workflow.entity.*
 import com.github.wenslo.forger.workflow.enums.ActionType
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.repository.*
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.CollectionUtils
@@ -46,6 +48,15 @@ class PlayScriptServiceImpl : PlayScriptService,
 
     @Autowired
     lateinit var executorActionParamRepository: ExecutorActionParamRepository
+
+    @Autowired
+    lateinit var executorTemplateParamRepository: ExecutorTemplateParamRepository
+
+    @Autowired
+    lateinit var templateActionRepository: TemplateActionRepository
+
+    @Autowired
+    lateinit var mongoTemplate: MongoTemplate
 
     @Autowired
     lateinit var executeFactory: ExecuteFactory
@@ -162,8 +173,65 @@ class PlayScriptServiceImpl : PlayScriptService,
 
     }
 
+    override fun saveTemplateParams(playScript: PlayScript) {
+        val nodes = playScript.nodes
+        val hasWrong = nodes.any {
+            (executeFactory.getExecutor(it.executorId)
+                ?.getResourceInfo()?.executorType ?: ExecutorType.NONE) == ExecutorType.NONE
+        }
+        if (hasWrong) {
+            throw BusinessException("Executor id is wrong")
+        }
+
+        val templateActions = nodes.map {
+            executeFactory.getExecutor(it.executorId)
+                ?.getResourceInfo()?.executorType ?: ExecutorType.NONE
+        }.let {
+            templateActionRepository.findByTypeIn(it)
+        }
+        if (templateActions.isEmpty()) {
+            throw BusinessException("Executor type is wrong")
+        }
+
+        val templateExecutorMap =
+            templateActions.associateBy(keySelector = { it.type }, valueTransform = { it.templateId })
+
+        val templateIdList = templateActions.map { it.templateId }.distinct().toList()
+        val query = Query()
+        query.addCriteria(Criteria.where("_id").`in`(templateIdList))
+        val record = mongoTemplate.find(query, Template::class.java)
+        val templateFieldMap = record.associateBy({ it.id }, { it.fields })
+
+
+        val list = mutableListOf<ExecutorTemplateParam>()
+        for (node in nodes) {
+            val executorType =
+                executeFactory.getExecutor(node.executorId)?.getResourceInfo()?.executorType ?: ExecutorType.NONE
+            // find it node belong template's parameter, and saving it
+            templateExecutorMap[executorType]?.let {
+                templateFieldMap[it]?.let { fieldDtoList ->
+                    fieldDtoList.forEach { fieldDto ->
+                        val param = ExecutorTemplateParam().apply {
+                            this.actionExecutorId = node.executorId
+                            this.actionUniqueId = node.uniqueId
+                            this.playScriptId = playScript.id ?: 0
+                            this.playScriptUniqueId = playScript.uniqueId
+                            this.params = fieldDto
+                        }
+                        list.add(param)
+                    }
+                }
+            }
+        }
+
+        if (list.isEmpty()) {
+            throw BusinessException("Template is not installed")
+        }
+        executorTemplateParamRepository.saveAll(list)
+    }
+
     override fun actionMapByUniqueId(playScriptId: Long): Map<String, PlayScriptAction> {
-        //TODO cache it
+        //cache it
         val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
         if (CollectionUtils.isEmpty(actions)) {
             return emptyMap()
@@ -172,7 +240,7 @@ class PlayScriptServiceImpl : PlayScriptService,
     }
 
     override fun actionPreviousMap(playScriptId: Long): Map<String, List<String>> {
-        //TODO cache it
+        //cache it
         val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
         if (CollectionUtils.isEmpty(actions)) {
             return emptyMap()
@@ -181,7 +249,7 @@ class PlayScriptServiceImpl : PlayScriptService,
     }
 
     override fun actionNextMap(playScriptId: Long): Map<String, List<String>> {
-        //TODO cache it
+        //cache it
         val actions = playScriptActionRepository.findByPlayScriptId(playScriptId)
         if (CollectionUtils.isEmpty(actions)) {
             return emptyMap()

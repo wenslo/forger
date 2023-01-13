@@ -29,4 +29,6 @@ interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
     fun actionNextMap(playScriptId: Long): Map<String, List<String>>
 
     fun findNextEmpty(playScriptId: Long): List<String>
+
+    fun saveTemplateParams(playScript: PlayScript)
 }

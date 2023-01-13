@@ -1,6 +1,7 @@
 package com.github.wenslo.forger.workflow.domain
 
 import com.github.wenslo.forger.workflow.enums.ActionType
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 
 /**
@@ -14,4 +15,5 @@ data class ActionDto(
     var author: String = "",
     var asyncFlag: IsFlag = IsFlag.NO,
     var actionType: ActionType = ActionType.NORMAL,
+    var executorType: ExecutorType = ExecutorType.NONE
 )

@@ -153,3 +153,9 @@ project(":forger-cloud-server") {
         implementation("org.springframework.cloud:spring-cloud-config-server:3.1.5")
     }
 }
+
+project(":forger-algorithm") {
+    dependencies {
+
+    }
+}

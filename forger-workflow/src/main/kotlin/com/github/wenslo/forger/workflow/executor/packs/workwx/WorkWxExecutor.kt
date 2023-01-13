@@ -9,6 +9,7 @@ import com.github.wenslo.forger.workflow.entity.ExecutorActionOriginData
 import com.github.wenslo.forger.workflow.entity.ExecutorActionTranslatedData
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.executor.BaseExecutor
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxBaseRes
@@ -59,7 +60,7 @@ class WorkWxExecutor : BaseExecutor() {
 
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
-        asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE
+        asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE, executorType = ExecutorType.WORK_WEIXIN
     )
 
 

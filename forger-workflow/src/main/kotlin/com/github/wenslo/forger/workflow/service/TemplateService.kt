@@ -11,6 +11,7 @@ import com.github.wenslo.forger.workflow.entity.TemplateAction
  * @date 2022/12/25 13:51
  */
 interface TemplateService : LongIdService<Template, TemplateCondition> {
+
     fun findAllTemplate(): List<Template>
 
     fun findByTemplateId(condition: TemplateActionCondition): List<TemplateAction>
