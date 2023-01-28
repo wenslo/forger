@@ -7,6 +7,7 @@ import com.github.wenslo.forger.workflow.entity.ExecutorActionOriginData
 import com.github.wenslo.forger.workflow.entity.ExecutorActionParam
 import com.github.wenslo.forger.workflow.entity.ExecutorActionTranslatedData
 import com.github.wenslo.forger.workflow.entity.ExecutorTemplateParam
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.repository.ExecutorActionParamRepository
 import com.github.wenslo.forger.workflow.repository.ExecutorTemplateParamRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,24 +25,30 @@ abstract class BaseExecutor {
     @Autowired
     lateinit var playscriptParamRepository: ExecutorActionParamRepository
 
-    open fun getExecutorId(): String {
-        return this.getResourceInfo().let {
-            it.name + it.versionNum
-        }
+    open fun getExecutorType(): ExecutorType {
+        return this.getResourceInfo().executorType
     }
 
-    open fun getTemplateDto(playScriptId: Long, executorId: String, actionUniqueId: String): ExecutorTemplateParam? {
-        return templateParamRepository.findTopByPlayScriptIdAndActionExecutorIdAndActionUniqueId(
+    open fun getTemplateDto(
+        playScriptId: Long,
+        executorType: ExecutorType,
+        actionUniqueId: String
+    ): ExecutorTemplateParam? {
+        return templateParamRepository.findTopByPlayScriptIdAndActionExecutorTypeAndActionUniqueId(
             playScriptId,
-            executorId,
+            executorType,
             actionUniqueId
         )
     }
 
-    open fun getActionParamDto(playScriptId: Long, executorId: String, actionUniqueId: String): ExecutorActionParam? {
-        return playscriptParamRepository.findTopByPlayScriptIdAndActionExecutorIdAndActionUniqueId(
+    open fun getActionParamDto(
+        playScriptId: Long,
+        executorType: ExecutorType,
+        actionUniqueId: String
+    ): ExecutorActionParam? {
+        return playscriptParamRepository.findTopByPlayScriptIdAndActionExecutorTypeAndActionUniqueId(
             playScriptId,
-            executorId,
+            executorType,
             actionUniqueId
         )
     }

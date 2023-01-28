@@ -3,6 +3,7 @@ package com.github.wenslo.forger.workflow.entity
 import com.github.wenslo.forger.data.jpa.convert.StringListConverter
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.ActionType
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import javax.persistence.Convert
 import javax.persistence.Entity
@@ -27,7 +28,8 @@ data class PlayScriptAction(
     @Enumerated(EnumType.STRING)
     var cycleFlag: IsFlag = IsFlag.NO,
     var cycleCount: Int = 1,
-    var executorId: String = "",
+    @Enumerated(EnumType.STRING)
+    var executorType: ExecutorType = ExecutorType.NONE,
     @Enumerated(EnumType.STRING)
     var actionType: ActionType = ActionType.NORMAL,
     @Enumerated(EnumType.STRING)

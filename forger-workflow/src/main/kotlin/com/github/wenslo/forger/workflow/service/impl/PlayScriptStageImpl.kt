@@ -5,11 +5,11 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
-import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordLogRepository
@@ -55,7 +55,7 @@ class PlayScriptStageImpl : PlayScriptStage {
     @Suppress("UNCHECKED_CAST")
     override fun paramValid(playScript: PlayScript) {
         for (fieldDtoList in playScript.params.values) {
-            FieldValidUtil.valid(fieldDtoList as List<FieldDto>)
+            FieldValidUtil.valid(fieldDtoList)
         }
     }
 
@@ -96,10 +96,10 @@ class PlayScriptStageImpl : PlayScriptStage {
         }
         val action = actionRepository.findTopByPlayScriptIdAndUniqueId(ship.playScriptId, current)
         action?.let {
-            executeFactory.getExecutor(it.executorId)?.let { executor ->
+            executeFactory.getExecutor(it.executorType)?.let { executor ->
                 logger.info("Executor is ：{}", gson.toJson(executor.getResourceInfo()))
                 //record log generate
-                val recordLog = generateRecordLog(ship, it.executorId)
+                val recordLog = generateRecordLog(ship, it.executorType)
                 ship.recordLogId = recordLog.id ?: 0
                 val executeResponse = executor.execute(ship)
                 //populate record log information
@@ -191,7 +191,7 @@ class PlayScriptStageImpl : PlayScriptStage {
         action: PlayScriptAction,
         recordLog: PlayScriptExecuteRecordLog
     ) {
-        //find next action by current action, if these dependence are not all pass, waiting for another handler finished it
+        //find next action by current action, if these dependence are not all pass, waiting for another handler to finished it
         val allMap = playScriptService.actionMapByUniqueId(action.playScriptId)
         if (allMap.isEmpty()) {
             throw BusinessException("Engine has error")
@@ -235,13 +235,13 @@ class PlayScriptStageImpl : PlayScriptStage {
         TODO("Not yet implemented")
     }
 
-    private fun generateRecordLog(ship: ExecuteShip, executorId: String): PlayScriptExecuteRecordLog {
+    private fun generateRecordLog(ship: ExecuteShip, executorType: ExecutorType): PlayScriptExecuteRecordLog {
         val recordLog = PlayScriptExecuteRecordLog(
             playScriptId = ship.playScriptId,
             playScriptUniqueId = ship.playScriptUniqueId,
             recordId = ship.playScriptRecordId,
             actionUniqueId = ship.current,
-            executorId = executorId,
+            executorType = executorType,
             beginTime = LocalDateTime.now(),
             executeFlag = IsFlag.YES
         ).also {

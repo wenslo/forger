@@ -129,9 +129,9 @@ class PlayScriptServiceImpl : PlayScriptService,
                 if (previousActions != null) {
                     this.previous = previousActions
                 }
-                this.executorId = it.executorId
+                this.executorType = it.executorType
                 this.actionType =
-                    executeFactory.getExecutor(it.executorId)?.getResourceInfo()?.actionType ?: ActionType.NORMAL
+                    executeFactory.getExecutor(it.executorType)?.getResourceInfo()?.actionType ?: ActionType.NORMAL
                 //asyncFlag cycleFlag cycleCount
             }
         }.toList()
@@ -158,14 +158,14 @@ class PlayScriptServiceImpl : PlayScriptService,
         }
         val playScriptId = playScript.id
         val playScriptUniqueId = playScript.uniqueId
-        val executorIdMap = playScript.nodes.associateBy({ it.uniqueId }, { it.executorId })
+        val executorTypeMap = playScript.nodes.associateBy({ it.uniqueId }, { it.executorType })
         val list = params.entries.map {
             val actionUniqueId = it.key
             ExecutorActionParam().apply {
                 this.playScriptId = playScriptId ?: 0
                 this.playScriptUniqueId = playScriptUniqueId
                 this.actionUniqueId = actionUniqueId
-                this.actionExecutorId = executorIdMap[actionUniqueId] ?: ""
+                this.actionExecutorType = executorTypeMap[actionUniqueId] ?: ExecutorType.NONE
                 this.params = it.value
             }
         }.toList()
@@ -176,7 +176,7 @@ class PlayScriptServiceImpl : PlayScriptService,
     override fun saveTemplateParams(playScript: PlayScript) {
         val nodes = playScript.nodes
         val hasWrong = nodes.any {
-            (executeFactory.getExecutor(it.executorId)
+            (executeFactory.getExecutor(it.executorType)
                 ?.getResourceInfo()?.executorType ?: ExecutorType.NONE) == ExecutorType.NONE
         }
         if (hasWrong) {
@@ -184,7 +184,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         }
 
         val templateActions = nodes.map {
-            executeFactory.getExecutor(it.executorId)
+            executeFactory.getExecutor(it.executorType)
                 ?.getResourceInfo()?.executorType ?: ExecutorType.NONE
         }.let {
             templateActionRepository.findByTypeIn(it)
@@ -206,13 +206,13 @@ class PlayScriptServiceImpl : PlayScriptService,
         val list = mutableListOf<ExecutorTemplateParam>()
         for (node in nodes) {
             val executorType =
-                executeFactory.getExecutor(node.executorId)?.getResourceInfo()?.executorType ?: ExecutorType.NONE
+                executeFactory.getExecutor(node.executorType)?.getResourceInfo()?.executorType ?: ExecutorType.NONE
             // find it node belong template's parameter, and saving it
             templateExecutorMap[executorType]?.let {
                 templateFieldMap[it]?.let { fieldDtoList ->
                     fieldDtoList.forEach { fieldDto ->
                         val param = ExecutorTemplateParam().apply {
-                            this.actionExecutorId = node.executorId
+                            this.actionExecutorType = node.executorType
                             this.actionUniqueId = node.uniqueId
                             this.playScriptId = playScript.id ?: 0
                             this.playScriptUniqueId = playScript.uniqueId

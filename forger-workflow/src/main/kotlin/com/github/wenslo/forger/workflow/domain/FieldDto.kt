@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.workflow.domain
 
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.FieldType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.enums.RuleOperator
@@ -20,5 +21,5 @@ data class FieldDto(
     var thresholdUsed: IsFlag,
     var value: String = "",
     var operators: List<RuleOperator> = emptyList(),
-    var executorId: String = "",
+    var executorType: ExecutorType = ExecutorType.NONE,
 )

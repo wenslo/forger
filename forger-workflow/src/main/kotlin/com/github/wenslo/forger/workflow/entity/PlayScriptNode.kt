@@ -1,6 +1,7 @@
 package com.github.wenslo.forger.workflow.entity
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -16,7 +17,8 @@ data class PlayScriptNode(
     var playScriptUniqueId: String = "",
     var uniqueId: String = "",
     var name: String = "",
-    var executorId: String = "",
+    @Enumerated(EnumType.STRING)
+    var executorType: ExecutorType = ExecutorType.NONE,
     var horizontal: String = "",
     var vertical: String = "",
     var ico: String = "",

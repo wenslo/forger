@@ -67,14 +67,14 @@ class WorkWxExecutor : BaseExecutor() {
     override fun execute(ship: ExecuteShip): ExecutorResponse {
         // get template dto
         val templateParam =
-            super.getTemplateDto(ship.playScriptId, super.getExecutorId(), ship.current)
+            super.getTemplateDto(ship.playScriptId, super.getExecutorType(), ship.current)
                 ?: return ExecutorResponse(
                     status = ExecuteStatus.PARAMS_NOT_EXISTS,
                     message = ExecuteStatus.PARAMS_NOT_EXISTS.name
                 )
 
         // get parameter dto
-        val actionParam = super.getActionParamDto(ship.playScriptId, super.getExecutorId(), ship.current)
+        val actionParam = super.getActionParamDto(ship.playScriptId, super.getExecutorType(), ship.current)
             ?: return ExecutorResponse(
                 status = ExecuteStatus.PARAMS_NOT_EXISTS,
                 message = ExecuteStatus.PARAMS_NOT_EXISTS.name
@@ -116,7 +116,7 @@ class WorkWxExecutor : BaseExecutor() {
             this.playScriptId = ship.playScriptId
             this.playScriptUniqueId = ship.playScriptUniqueId
             this.actionUniqueId = ship.current
-            this.actionExecutorId = super.getExecutorId()
+            this.actionExecutorType = super.getExecutorType()
             this.recordLogId = ship.recordLogId
             this.params = user
         }
@@ -128,7 +128,7 @@ class WorkWxExecutor : BaseExecutor() {
             this.playScriptId = ship.playScriptId
             this.playScriptUniqueId = ship.playScriptUniqueId
             this.actionUniqueId = ship.current
-            this.actionExecutorId = super.getExecutorId()
+            this.actionExecutorType = super.getExecutorType()
             this.recordLogId = ship.recordLogId
             this.params = user
         }

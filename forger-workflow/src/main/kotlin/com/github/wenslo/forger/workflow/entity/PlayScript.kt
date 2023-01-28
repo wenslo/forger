@@ -1,6 +1,7 @@
 package com.github.wenslo.forger.workflow.entity
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
+import com.github.wenslo.forger.workflow.domain.FieldDto
 import javax.persistence.Entity
 import javax.persistence.Transient
 
@@ -21,5 +22,5 @@ data class PlayScript(
     @Transient
     var shuttles: Map<String, List<PlayScriptActionShuttle>> = emptyMap(),
     @Transient
-    var params: Map<String, Any> = emptyMap(),
+    var params: Map<String, List<FieldDto>> = emptyMap(),
 ) : LongIdEntity()

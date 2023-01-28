@@ -2,6 +2,7 @@ package com.github.wenslo.forger.workflow.entity
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
+import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import java.time.LocalDateTime
 import javax.persistence.Entity
@@ -18,7 +19,7 @@ data class PlayScriptExecuteRecordLog(
     var playScriptUniqueId: String = "",
     var recordId: Long = 0,
     var actionUniqueId: String = "",
-    var executorId: String = "",
+    var executorType: ExecutorType = ExecutorType.NONE,
     var beginTime: LocalDateTime = LocalDateTime.now(),
     var endTime: LocalDateTime = LocalDateTime.MIN,
     @Enumerated(EnumType.STRING)
