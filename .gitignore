@@ -225,3 +225,27 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+.forger-react/**/node_modules
+.forger-react//src/utils/request-temp.js
+.forger-react/_roadhog-api-doc
+.forger-react/dist
+.forger-react/.DS_Store
+.forger-react/npm-debug.log*
+.forger-react/yarn-error.log
+.forger-react/coverage
+.forger-react/.idea
+.forger-react/yarn.lock
+.forger-react/package-lock.json
+.forger-react/*bak
+.forger-react/.vscode
+.forger-react/.history
+.forger-react/*.log
+.forger-react/functions/*
+.forger-react/.temp/**
+.forger-react/.umi
+.forger-react/.umi-production
+.forger-react/.umi-test
+.forger-react/screenshot
+.forger-react/.firebase
+.forger-react/.eslintcache
+.forger-react/build
