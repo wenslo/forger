@@ -1,5 +1,6 @@
 package com.github.wenslo.forger.workflow.entity
 
+import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.mapping.Document
@@ -17,5 +18,5 @@ data class ExecutorTemplateParam(
     var playScriptUniqueId: String = "",
     var actionUniqueId: String = "",
     var actionExecutorType: ExecutorType = ExecutorType.NONE,
-    var params: Any? = null
+    var params: List<FieldDto>? = null
 )

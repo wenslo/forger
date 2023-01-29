@@ -95,6 +95,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         playScriptNodeLineRepository.saveAll(lines)
     }
 
+    @Transactional(readOnly = false)
     override fun savePlayScriptNode(playScript: PlayScript) {
         val nodes = playScript.nodes
         if (nodes.isEmpty()) {
@@ -138,6 +139,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         playScriptActionRepository.saveAll(actions)
     }
 
+    @Transactional(readOnly = false)
     override fun saveParamShuttles(playScript: PlayScript) {
         val shuttles = playScript.shuttles
         if (shuttles.isEmpty()) {
@@ -151,6 +153,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         playScriptActionShuttleRepository.saveAll(list)
     }
 
+    @Transactional(readOnly = false)
     override fun savePlayScriptParams(playScript: PlayScript) {
         val params = playScript.params
         if (params.isEmpty()) {
@@ -173,6 +176,7 @@ class PlayScriptServiceImpl : PlayScriptService,
 
     }
 
+    @Transactional(readOnly = false)
     override fun saveTemplateParams(playScript: PlayScript) {
         val nodes = playScript.nodes
         val hasWrong = nodes.any {
@@ -210,16 +214,14 @@ class PlayScriptServiceImpl : PlayScriptService,
             // find it node belong template's parameter, and saving it
             templateExecutorMap[executorType]?.let {
                 templateFieldMap[it]?.let { fieldDtoList ->
-                    fieldDtoList.forEach { fieldDto ->
-                        val param = ExecutorTemplateParam().apply {
-                            this.actionExecutorType = node.executorType
-                            this.actionUniqueId = node.uniqueId
-                            this.playScriptId = playScript.id ?: 0
-                            this.playScriptUniqueId = playScript.uniqueId
-                            this.params = fieldDto
-                        }
-                        list.add(param)
+                    val param = ExecutorTemplateParam().apply {
+                        this.actionExecutorType = node.executorType
+                        this.actionUniqueId = node.uniqueId
+                        this.playScriptId = playScript.id ?: 0
+                        this.playScriptUniqueId = playScript.uniqueId
+                        this.params = fieldDtoList
                     }
+                    list.add(param)
                 }
             }
         }

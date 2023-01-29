@@ -17,7 +17,7 @@ import com.github.wenslo.forger.workflow.service.ActionProducerService
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
-import com.github.wenslo.forger.workflow.utils.FieldValidUtil
+import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -55,7 +55,7 @@ class PlayScriptStageImpl : PlayScriptStage {
     @Suppress("UNCHECKED_CAST")
     override fun paramValid(playScript: PlayScript) {
         for (fieldDtoList in playScript.params.values) {
-            FieldValidUtil.valid(fieldDtoList)
+            FieldDtoUtil.valid(fieldDtoList)
         }
     }
 

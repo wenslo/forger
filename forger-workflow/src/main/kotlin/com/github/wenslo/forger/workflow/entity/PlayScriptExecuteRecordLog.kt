@@ -21,7 +21,7 @@ data class PlayScriptExecuteRecordLog(
     var actionUniqueId: String = "",
     var executorType: ExecutorType = ExecutorType.NONE,
     var beginTime: LocalDateTime = LocalDateTime.now(),
-    var endTime: LocalDateTime = LocalDateTime.MIN,
+    var endTime: LocalDateTime = LocalDateTime.now().minusYears(1),
     @Enumerated(EnumType.STRING)
     var finishFlag: IsFlag = IsFlag.NO,
     @Enumerated(EnumType.STRING)

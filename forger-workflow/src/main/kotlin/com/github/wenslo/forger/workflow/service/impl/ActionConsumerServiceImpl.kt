@@ -26,18 +26,19 @@ class ActionConsumerServiceImpl : ActionConsumerService {
     @Autowired
     lateinit var playScriptStage: PlayScriptStage
 
-    @JmsListener(destination = "executor")
+    @JmsListener(destination = "workflow_executor")
     override fun receiveExecuteMessageFromQueue(textMessage: TextMessage, session: Session) {
         try {
             val record = gson.fromJson(textMessage.text, ExecuteShip::class.java)
             playScriptStage.execute(record)
             textMessage.acknowledge()
         } catch (e: Exception) {
+            logger.error("Executor has error", e)
             session.recover()
         }
     }
 
-    @JmsListener(destination = "pull_check")
+    @JmsListener(destination = "workflow_pull_check")
     override fun receivePullMessageFromQueue(textMessage: TextMessage, session: Session) {
         try {
             playScriptStage.getExecuteResult(textMessage.text.toInt())

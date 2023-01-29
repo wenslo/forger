@@ -9,7 +9,7 @@ import com.github.wenslo.forger.workflow.entity.TemplateAction
 import com.github.wenslo.forger.workflow.repository.TemplateActionRepository
 import com.github.wenslo.forger.workflow.repository.TemplateRepository
 import com.github.wenslo.forger.workflow.service.TemplateService
-import com.github.wenslo.forger.workflow.utils.FieldValidUtil
+import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -56,7 +56,7 @@ class TemplateServiceImpl : TemplateService, LongIdServiceImpl<Template, Templat
         }
         val reference = repository.getReferenceById(template.id!!)
         reference.fields = template.fields
-        FieldValidUtil.valid(reference.fields ?: emptyList())
+        FieldDtoUtil.valid(reference.fields ?: emptyList())
         val query = Query()
         query.addCriteria(Criteria.where("_id").`is`(reference.id))
         val record = mongoTemplate.findOne(query, Template::class.java)

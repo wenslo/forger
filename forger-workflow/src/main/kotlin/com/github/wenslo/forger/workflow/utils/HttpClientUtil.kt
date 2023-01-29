@@ -22,10 +22,10 @@ object HttpClientUtil {
 
     fun getBodyFromResponse(response: CloseableHttpResponse): String {
         checkSuccess(response)
-        EntityUtils.consume(response.entity)
         // content to string and to bean
         val writer = StringWriter()
-        IOUtils.copy(response.entity.content, writer, "UTF-8");
+        IOUtils.copy(response.entity.content, writer, "UTF-8")
+        EntityUtils.consume(response.entity)
         val respStr = writer.toString()
         if (logger.isTraceEnabled) {
             logger.trace("response is $respStr")

@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Validator
 import cn.hutool.core.util.NumberUtil
 import cn.hutool.core.util.StrUtil
 import com.github.wenslo.forger.core.exceptions.BusinessException
+import com.github.wenslo.forger.core.util.GsonSingleton
 import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.enums.FieldType
 import com.github.wenslo.forger.workflow.enums.IsFlag
@@ -14,7 +15,7 @@ import java.text.SimpleDateFormat
  * @author wenhailin
  * @date 2023/1/10 14:16
  */
-object FieldValidUtil {
+object FieldDtoUtil {
 
     fun valid(fields: List<FieldDto>) {
         if (fields.isEmpty()) return
@@ -28,12 +29,15 @@ object FieldValidUtil {
             }
             val value = collect[name]
             if (it.requireFlag == IsFlag.YES) {
-                if (StrUtil.isBlank(value)) {
+                if (value == null) {
+                    throw BusinessException.PARAM_ERROR
+                }
+                if (value is String && StrUtil.isBlank(value)) {
                     throw BusinessException.PARAM_ERROR
                 }
             }
-            if (StrUtil.isNotBlank(value)) {
-                val valid = this.valid(it, value ?: "")
+            if (value != null && value is String && StrUtil.isNotBlank(value)) {
+                val valid = this.valid(it, value)
                 if (!valid) {
                     throw BusinessException.PARAM_ERROR
                 }
@@ -88,5 +92,14 @@ object FieldValidUtil {
             }
         }
         return true
+    }
+
+    fun <T> convert(fields: List<FieldDto>?, clazz: Class<T>): T? {
+        if (fields?.isEmpty() == true) {
+            return null
+        }
+        val map = fields?.associateBy(keySelector = { it.name }, valueTransform = { it.value })
+        val gson = GsonSingleton.getInstance()
+        return gson.fromJson(gson.toJson(map), clazz)
     }
 }

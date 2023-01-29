@@ -26,7 +26,7 @@ class ActionProducerServiceImpl : ActionProducerService {
 
     companion object {
         private const val EXECUTE_QUEUE = "workflow_executor"
-        private const val EXECUTE_PULL_QUEUE = "workflow_pull"
+        private const val EXECUTE_PULL_QUEUE = "workflow_pull_check"
         private const val INSTANCE_ID_NAME = "instanceId"
         private const val EXECUTE_RECORD_ID_NAME = "executeRecordId"
         private const val EXECUTE_RECORD_LOG_ID_NAME = "executeRecordLogId"

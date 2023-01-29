@@ -19,7 +19,7 @@ data class FieldDto(
     var len: Int,
     var sortNum: Int,
     var thresholdUsed: IsFlag,
-    var value: String = "",
+    var value: Any? = null,
     var operators: List<RuleOperator> = emptyList(),
     var executorType: ExecutorType = ExecutorType.NONE,
 )

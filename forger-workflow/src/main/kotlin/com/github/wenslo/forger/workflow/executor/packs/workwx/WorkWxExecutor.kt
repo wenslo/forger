@@ -20,6 +20,7 @@ import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.Wor
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxTemplateDto
 import com.github.wenslo.forger.workflow.repository.ExecutorActionOriginDataRepository
 import com.github.wenslo.forger.workflow.repository.ExecutorActionTranslatedDataRepository
+import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -79,18 +80,22 @@ class WorkWxExecutor : BaseExecutor() {
                 status = ExecuteStatus.PARAMS_NOT_EXISTS,
                 message = ExecuteStatus.PARAMS_NOT_EXISTS.name
             )
-        val templateDto = templateParam.params as WorkWxTemplateDto
-        val actionDto = actionParam.params as WorkWxActionReq
+        val templateDto = FieldDtoUtil.convert(templateParam.params, WorkWxTemplateDto::class.java)
+        val actionDto = FieldDtoUtil.convert(actionParam.params, WorkWxActionReq::class.java)
+        if (templateDto == null || actionDto == null) return ExecutorResponse(
+            status = ExecuteStatus.ERROR,
+            message = "error"
+        )
         val token = getWorkWeixinToken(templateDto)
         val status = sendWorkWeixinInfo(token, templateDto, actionDto)
         val user = getWorkWeixinUser(token, actionDto)
         this.saveOriginData(ship, user)
         this.saveTranslatedData(ship, user)
-        if (status) {
+        return if (status) {
             //return executed response
-            return ExecutorResponse(originData = actionDto, translatedData = actionDto)
+            ExecutorResponse(originData = actionDto, translatedData = actionDto)
         } else {
-            return ExecutorResponse(status = ExecuteStatus.ERROR, message = "error")
+            ExecutorResponse(status = ExecuteStatus.ERROR, message = "error")
         }
 
     }
