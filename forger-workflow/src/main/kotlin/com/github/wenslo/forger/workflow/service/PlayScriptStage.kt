@@ -1,7 +1,7 @@
 package com.github.wenslo.forger.workflow.service
 
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
-import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 
 /**
  * @author wenhailin

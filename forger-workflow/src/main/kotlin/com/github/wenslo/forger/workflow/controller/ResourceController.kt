@@ -6,7 +6,7 @@ import com.github.wenslo.forger.workflow.cache.InitListener.Companion.actionReqF
 import com.github.wenslo.forger.workflow.cache.InitListener.Companion.actionResFieldMap
 import com.github.wenslo.forger.workflow.cache.InitListener.Companion.templateFieldMap
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
-import com.github.wenslo.forger.workflow.entity.Template
+import com.github.wenslo.forger.workflow.entity.jpa.Template
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.service.TemplateService
 import com.google.gson.Gson

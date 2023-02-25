@@ -5,8 +5,8 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
-import com.github.wenslo.forger.workflow.entity.ExecutorActionOriginData
-import com.github.wenslo.forger.workflow.entity.ExecutorActionTranslatedData
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionOriginData
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionTranslatedData
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.ExecutorType
@@ -18,8 +18,8 @@ import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.Wo
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxUserInfo
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxActionReq
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxTemplateDto
-import com.github.wenslo.forger.workflow.repository.ExecutorActionOriginDataRepository
-import com.github.wenslo.forger.workflow.repository.ExecutorActionTranslatedDataRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionOriginDataRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionTranslatedDataRepository
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
 import com.google.gson.Gson

@@ -4,10 +4,10 @@ import com.github.wenslo.forger.core.exceptions.BusinessException
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
 import com.github.wenslo.forger.workflow.condition.TemplateCondition
-import com.github.wenslo.forger.workflow.entity.Template
-import com.github.wenslo.forger.workflow.entity.TemplateAction
-import com.github.wenslo.forger.workflow.repository.TemplateActionRepository
-import com.github.wenslo.forger.workflow.repository.TemplateRepository
+import com.github.wenslo.forger.workflow.entity.jpa.Template
+import com.github.wenslo.forger.workflow.entity.jpa.TemplateAction
+import com.github.wenslo.forger.workflow.repository.jpa.TemplateActionRepository
+import com.github.wenslo.forger.workflow.repository.jpa.TemplateRepository
 import com.github.wenslo.forger.workflow.service.TemplateService
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import org.springframework.beans.factory.annotation.Autowired

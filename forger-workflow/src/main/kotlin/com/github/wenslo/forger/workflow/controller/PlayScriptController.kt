@@ -1,7 +1,7 @@
 package com.github.wenslo.forger.workflow.controller
 
 import com.github.wenslo.forger.core.inline.getLogger
-import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.service.PlayScriptStage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping

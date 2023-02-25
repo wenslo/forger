@@ -2,7 +2,7 @@ package com.github.wenslo.forger.workflow.service.impl
 
 import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.exceptions.ExecuteException
 import com.github.wenslo.forger.workflow.service.ActionProducerService
 import com.google.gson.Gson

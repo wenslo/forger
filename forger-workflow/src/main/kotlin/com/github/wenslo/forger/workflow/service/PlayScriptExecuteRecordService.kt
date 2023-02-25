@@ -3,8 +3,8 @@ package com.github.wenslo.forger.workflow.service
 import com.github.wenslo.forger.data.jpa.service.LongIdService
 import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondition
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
-import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 
 /**

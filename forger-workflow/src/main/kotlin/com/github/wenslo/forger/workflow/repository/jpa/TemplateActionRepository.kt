@@ -1,7 +1,7 @@
-package com.github.wenslo.forger.workflow.repository
+package com.github.wenslo.forger.workflow.repository.jpa
 
 import com.github.wenslo.forger.data.jpa.repository.LongIdRepository
-import com.github.wenslo.forger.workflow.entity.TemplateAction
+import com.github.wenslo.forger.workflow.entity.jpa.TemplateAction
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import org.springframework.stereotype.Repository
 

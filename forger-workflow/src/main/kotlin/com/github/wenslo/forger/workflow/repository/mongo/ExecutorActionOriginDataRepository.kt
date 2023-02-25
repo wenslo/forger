@@ -1,6 +1,6 @@
-package com.github.wenslo.forger.workflow.repository
+package com.github.wenslo.forger.workflow.repository.mongo
 
-import com.github.wenslo.forger.workflow.entity.ExecutorActionOriginData
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionOriginData
 import org.bson.types.ObjectId
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

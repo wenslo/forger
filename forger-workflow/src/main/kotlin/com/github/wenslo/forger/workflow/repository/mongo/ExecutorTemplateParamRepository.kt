@@ -1,6 +1,6 @@
-package com.github.wenslo.forger.workflow.repository
+package com.github.wenslo.forger.workflow.repository.mongo
 
-import com.github.wenslo.forger.workflow.entity.ExecutorTemplateParam
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorTemplateParam
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import org.bson.types.ObjectId
 import org.springframework.data.repository.CrudRepository

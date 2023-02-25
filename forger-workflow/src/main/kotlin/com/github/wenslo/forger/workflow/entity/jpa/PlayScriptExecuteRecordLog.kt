@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.entity
+package com.github.wenslo.forger.workflow.entity.jpa
 
 import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus

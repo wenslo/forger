@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.entity
+package com.github.wenslo.forger.workflow.entity.mongo
 
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import org.bson.types.ObjectId
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId
  * @author wenhailin
  * @date 2022/11/8 10:40
  */
-@Document
+@Document(collection = "executor_action_translated_data")
 data class ExecutorActionTranslatedData(
     @MongoId
     var id: ObjectId? = null,

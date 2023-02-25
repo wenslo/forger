@@ -2,8 +2,8 @@ package com.github.wenslo.forger.workflow.service
 
 import com.github.wenslo.forger.data.jpa.service.LongIdService
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
-import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptAction
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptAction
 
 /**
  * @author wenhailin

@@ -3,8 +3,8 @@ package com.github.wenslo.forger.workflow.service
 import com.github.wenslo.forger.data.jpa.service.LongIdService
 import com.github.wenslo.forger.workflow.condition.TemplateActionCondition
 import com.github.wenslo.forger.workflow.condition.TemplateCondition
-import com.github.wenslo.forger.workflow.entity.Template
-import com.github.wenslo.forger.workflow.entity.TemplateAction
+import com.github.wenslo.forger.workflow.entity.jpa.Template
+import com.github.wenslo.forger.workflow.entity.jpa.TemplateAction
 
 /**
  * @author wenhailin

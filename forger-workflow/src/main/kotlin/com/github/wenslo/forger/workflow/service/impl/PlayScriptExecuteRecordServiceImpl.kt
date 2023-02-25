@@ -3,11 +3,11 @@ package com.github.wenslo.forger.workflow.service.impl
 import com.github.wenslo.forger.data.jpa.service.LongIdServiceImpl
 import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondition
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
-import com.github.wenslo.forger.workflow.entity.PlayScript
-import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptExecuteRecord
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
-import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
-import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordRepository
+import com.github.wenslo.forger.workflow.repository.jpa.PlayScriptActionRepository
+import com.github.wenslo.forger.workflow.repository.jpa.PlayScriptExecuteRecordRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -1,7 +1,7 @@
-package com.github.wenslo.forger.workflow.repository
+package com.github.wenslo.forger.workflow.repository.jpa
 
 import com.github.wenslo.forger.data.jpa.repository.LongIdRepository
-import com.github.wenslo.forger.workflow.entity.PlayScript
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import org.springframework.stereotype.Repository
 
 /**

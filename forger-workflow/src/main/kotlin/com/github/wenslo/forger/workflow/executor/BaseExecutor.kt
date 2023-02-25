@@ -3,13 +3,13 @@ package com.github.wenslo.forger.workflow.executor
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
-import com.github.wenslo.forger.workflow.entity.ExecutorActionOriginData
-import com.github.wenslo.forger.workflow.entity.ExecutorActionParam
-import com.github.wenslo.forger.workflow.entity.ExecutorActionTranslatedData
-import com.github.wenslo.forger.workflow.entity.ExecutorTemplateParam
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionOriginData
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionParam
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionTranslatedData
+import com.github.wenslo.forger.workflow.entity.mongo.ExecutorTemplateParam
 import com.github.wenslo.forger.workflow.enums.ExecutorType
-import com.github.wenslo.forger.workflow.repository.ExecutorActionParamRepository
-import com.github.wenslo.forger.workflow.repository.ExecutorTemplateParamRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionParamRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ExecutorTemplateParamRepository
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.File
 
