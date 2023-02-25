@@ -153,7 +153,7 @@ class WorkWxExecutor : BaseExecutor() {
             @SerializedName("msgType")
             val msgType = "text"
 
-            @SerializedName("agientid")
+            @SerializedName("agentid")
             val agentId = templateDto.agentId
 
             @SerializedName("text")

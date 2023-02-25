@@ -5,6 +5,7 @@ import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondit
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 
 /**
  * @author wenhailin
@@ -15,4 +16,9 @@ interface PlayScriptExecuteRecordService : LongIdService<PlayScriptExecuteRecord
      * search first node to execute, save record and generate ExecuteShip
      */
     fun saveRecordAndGenerateShip(playScript: PlayScript): List<ExecuteShip>
+
+    /**
+     * finish
+     */
+    fun finishById(succeed: PlayScriptProcessStatus, recordId: Long)
 }

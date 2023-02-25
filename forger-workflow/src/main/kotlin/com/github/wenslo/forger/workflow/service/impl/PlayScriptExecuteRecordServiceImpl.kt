@@ -5,6 +5,7 @@ import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondit
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.PlayScript
 import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
@@ -48,5 +49,10 @@ class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService,
             }
         }.toList()
         return ships
+    }
+
+    @Transactional
+    override fun finishById(status: PlayScriptProcessStatus, recordId: Long) {
+        recordRepository.updateProcessStatusById(status, recordId)
     }
 }

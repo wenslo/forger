@@ -11,6 +11,7 @@ import com.github.wenslo.forger.workflow.entity.PlayScriptExecuteRecordLog
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
+import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 import com.github.wenslo.forger.workflow.repository.PlayScriptActionRepository
 import com.github.wenslo.forger.workflow.repository.PlayScriptExecuteRecordLogRepository
 import com.github.wenslo.forger.workflow.service.ActionProducerService
@@ -232,7 +233,9 @@ class PlayScriptStageImpl : PlayScriptStage {
     }
 
     private fun playScriptIsOver(recordLog: PlayScriptExecuteRecordLog) {
-        TODO("Not yet implemented")
+        // save invoked info
+        recordService.finishById(PlayScriptProcessStatus.SUCCEED, recordLog.recordId)
+
     }
 
     private fun generateRecordLog(ship: ExecuteShip, executorType: ExecutorType): PlayScriptExecuteRecordLog {
