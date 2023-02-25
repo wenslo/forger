@@ -7,10 +7,10 @@ import com.github.wenslo.forger.core.domain.BaseEnum
  * @date 2022/10/25 09:17
  */
 enum class TemplateType(private val code: Int, private val label: String) : BaseEnum {
-    SONAR_QUBE_SCANNER(100, "sonar qube scanner"),
-    SONAR_QUBE_SERVER(102, "sonar qube server"),
-    SCA(103, "source code analyzer"),
-    WORK_WEIXIN(104, "work wechat"),
+    SONAR_QUBE_SCANNER(1000, "SonarQube Scanner"),
+    SONAR_QUBE_SERVER(1002, "SonarQube Server"),
+    WORK_WX(1004, "Work Weixin"),
+    GITLAB(1005, "Gitlab"),
 
     THRESHOLD(999, "threshold");
 

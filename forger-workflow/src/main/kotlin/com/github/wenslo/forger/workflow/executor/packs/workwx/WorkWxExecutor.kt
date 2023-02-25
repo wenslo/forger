@@ -61,7 +61,7 @@ class WorkWxExecutor : BaseExecutor() {
 
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
-        asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE, executorType = ExecutorType.WORK_WEIXIN
+        asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE, executorType = ExecutorType.WORK_WX_SEND
     )
 
 

@@ -8,14 +8,14 @@ import com.github.wenslo.forger.core.domain.BaseEnum
  */
 enum class ExecutorType(private val code: Int, private val label: String) : BaseEnum {
     NONE(-1, "Not implemented"),
-    SONAR_QUBE_SCANNER(101100, "sonar qube scanner"),
-    SONAR_QUBE_SERVER(102100, "sonar qube server"),
+    SONAR_QUBE_SCANNER(1001100, "SonarQube Scanner"),
+    SONAR_QUBE_SERVER(1002100, "SonarQube Server"),
 
-    SCA(103100, "source code analyzer"),
+    WORK_WX_SEND(1004100, "Work Weixin"),
+    GITLAB_USERS(1005100, "Gitlab users"),
+    GITLAB_PROJECTS(1005101, "Gitlab projects"),
 
-    WORK_WEIXIN(104100, "Work Weixin"),
-
-    THRESHOLD(999100, "threshold");
+    THRESHOLD(9999999, "threshold");
 
     override fun code(): Int {
         return code

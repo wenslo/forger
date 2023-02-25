@@ -11,8 +11,8 @@ import com.github.wenslo.forger.workflow.executor.packs.common.ParamCacheable
  * @author wenhailin
  * @date 2022/11/27 14:31
  */
-@ActionRequest(templateType = TemplateType.WORK_WEIXIN, executorType = ExecutorType.WORK_WEIXIN)
-@ActionResponse(templateType = TemplateType.WORK_WEIXIN, executorType = ExecutorType.WORK_WEIXIN)
+@ActionRequest(templateType = TemplateType.WORK_WX, executorType = ExecutorType.WORK_WX_SEND)
+@ActionResponse(templateType = TemplateType.WORK_WX, executorType = ExecutorType.WORK_WX_SEND)
 data class WorkWxActionReq(
     @FieldDefine(
         describe = "user_id",

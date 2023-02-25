@@ -9,7 +9,7 @@ import com.github.wenslo.forger.workflow.executor.packs.common.ParamCacheable
  * @author wenhailin
  * @date 2022/11/14 09:51
  */
-@TemplateUse(TemplateType.WORK_WEIXIN)
+@TemplateUse(TemplateType.WORK_WX)
 data class WorkWxTemplateDto(
     @FieldDefine(
         describe = "corp_id",
