@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.util.concurrent.locks.ReentrantLock
 
 /**
  * @author wenhailin
@@ -31,6 +32,10 @@ import java.time.LocalDateTime
 @Service
 class PlayScriptStageImpl : PlayScriptStage {
     val logger = getLogger<PlayScriptStageImpl>()
+
+    companion object {
+        val lock = ReentrantLock()
+    }
 
     @Autowired
     lateinit var gson: Gson
@@ -115,7 +120,10 @@ class PlayScriptStageImpl : PlayScriptStage {
                     }
                 }
                 //engine flow processing
+                //lock it
+                lock.lock()
                 this.finishedHook(executeResponse, action, recordLog)
+                lock.unlock()
             }
         }
 
