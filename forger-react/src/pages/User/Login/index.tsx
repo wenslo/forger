@@ -172,14 +172,6 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <ActionIcons key="icons" />,
-          ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -202,6 +194,7 @@ const Login: React.FC = () => {
                   id: 'pages.login.phoneLogin.tab',
                   defaultMessage: '手机号登录',
                 }),
+                disabled: true
               },
             ]}
           />
@@ -224,7 +217,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  defaultMessage: '用户名:',
                 })}
                 rules={[
                   {
@@ -246,7 +239,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: '密码：',
                 })}
                 rules={[
                   {
@@ -345,7 +338,7 @@ const Login: React.FC = () => {
               />
             </>
           )}
-          <div
+         {/* <div
             style={{
               marginBottom: 24,
             }}
@@ -360,7 +353,7 @@ const Login: React.FC = () => {
             >
               <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
             </a>
-          </div>
+          </div>*/}
         </LoginForm>
       </div>
       <Footer />

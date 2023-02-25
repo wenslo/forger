@@ -46,6 +46,22 @@ export default [
     ],
   },
   {
+    path: "/system",
+    name: "system",
+    icon: "crown",
+    routes: [
+      {
+        path: "/system",
+        redirect: "/system/user"
+      },
+      {
+        path: "/system/user",
+        name: "user",
+        component: './System/User'
+      }
+    ]
+  },
+  {
     name: 'list.table-list',
     icon: 'table',
     path: '/list',

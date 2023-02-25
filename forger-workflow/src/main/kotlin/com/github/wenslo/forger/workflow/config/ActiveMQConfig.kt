@@ -45,8 +45,9 @@ class ActiveMQConfig {
     @Bean
     fun getRedeliveryPolicy(): RedeliveryPolicy? {
         return RedeliveryPolicy().apply {
-            this.maximumRedeliveries = 0
-            this.backOffMultiplier = 10.0
+            this.maximumRedeliveries = 1
+            this.initialRedeliveryDelay = 5000
+//            this.backOffMultiplier = 10.0
             this.isUseExponentialBackOff = true
         }
     }
