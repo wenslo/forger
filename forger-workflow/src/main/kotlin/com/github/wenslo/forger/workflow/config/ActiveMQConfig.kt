@@ -38,15 +38,16 @@ class ActiveMQConfig {
             this.brokerURL = brokerUrl
             this.password = brokerUsername
             this.userName = brokerPassword
-            this.redeliveryPolicy = redeliveryPolicy
+            this.redeliveryPolicy = redeliveryPolicy()
+
         }
     }
 
     @Bean
-    fun getRedeliveryPolicy(): RedeliveryPolicy? {
+    fun redeliveryPolicy(): RedeliveryPolicy? {
         return RedeliveryPolicy().apply {
             this.maximumRedeliveries = 1
-            this.initialRedeliveryDelay = 5000
+            this.initialRedeliveryDelay = 10000
 //            this.backOffMultiplier = 10.0
             this.isUseExponentialBackOff = true
         }
