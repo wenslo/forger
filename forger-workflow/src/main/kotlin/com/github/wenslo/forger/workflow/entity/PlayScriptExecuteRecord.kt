@@ -5,6 +5,8 @@ import com.github.wenslo.forger.data.jpa.model.LongIdEntity
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 import javax.persistence.Convert
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 /**
  * @author wenhailin
@@ -14,6 +16,7 @@ import javax.persistence.Entity
 data class PlayScriptExecuteRecord(
     var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",
+    @Enumerated(EnumType.STRING)
     var processStatus: PlayScriptProcessStatus = PlayScriptProcessStatus.NONE,
     @Convert(converter = StringListConverter::class)
     var current: List<String> = emptyList(),
