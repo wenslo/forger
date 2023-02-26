@@ -19,7 +19,6 @@ import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.Wo
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxActionReq
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxTemplateDto
 import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionOriginDataRepository
-import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionTranslatedDataRepository
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
 import com.google.gson.Gson
@@ -55,9 +54,6 @@ class WorkWxExecutor : BaseExecutor() {
 
     @Autowired
     lateinit var executorActionOriginDataRepository: ExecutorActionOriginDataRepository
-
-    @Autowired
-    lateinit var executorActionTranslatedDataRepository: ExecutorActionTranslatedDataRepository
 
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
