@@ -54,6 +54,8 @@ object GsonSingleton {
                                 return@JsonDeserializer asString.toLong()
                             })
                         .setDateFormat(defaultDateTimeFormat)
+                        .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                        .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                         .create()
                 }
             }
