@@ -64,7 +64,7 @@ subprojects {
 project(":forger-core") {
     dependencies {
         compileOnly(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
-        api(group = "com.google.code.gson", name = "gson", version = "2.9.1")
+        api(group = "com.google.code.gson", name = "gson", version = "2.10.1")
         api(group = "org.apache.commons", name = "commons-lang3", version = "3.11")
         api(group = "com.google.guava", name = "guava", version = "31.1-jre")
     }
