@@ -5,6 +5,7 @@ import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondit
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 
 /**
@@ -21,4 +22,6 @@ interface PlayScriptExecuteRecordService : LongIdService<PlayScriptExecuteRecord
      * finish
      */
     fun finishById(succeed: PlayScriptProcessStatus, recordId: Long)
+
+    fun invokedStatusMapByPlayScriptId(playScriptId: Long): Map<String, IsFlag?>
 }

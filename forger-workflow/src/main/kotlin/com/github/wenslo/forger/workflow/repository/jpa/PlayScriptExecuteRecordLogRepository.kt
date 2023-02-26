@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository
  * @date 2022/10/30 11:04
  */
 @Repository
-interface PlayScriptExecuteRecordLogRepository : LongIdRepository<PlayScriptExecuteRecordLog, Long>
+interface PlayScriptExecuteRecordLogRepository : LongIdRepository<PlayScriptExecuteRecordLog, Long> {
+    fun findByPlayScriptId(playScriptId: Long): List<PlayScriptExecuteRecordLog>
+}

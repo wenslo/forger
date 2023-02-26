@@ -89,6 +89,7 @@ class PlayScriptServiceImpl : PlayScriptService,
         playScriptRepository.save(playScript)
     }
 
+    @Transactional
     override fun savePlayScriptNodeLine(playScript: PlayScript) {
         val lines = playScript.lines
         if (lines.isEmpty()) {

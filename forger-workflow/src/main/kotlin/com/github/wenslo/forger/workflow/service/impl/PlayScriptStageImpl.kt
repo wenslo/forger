@@ -121,9 +121,7 @@ class PlayScriptStageImpl : PlayScriptStage {
                 }
                 //engine flow processing
                 //lock it
-                lock.lock()
                 this.finishedHook(executeResponse, action, recordLog)
-                lock.unlock()
             }
         }
 
@@ -140,6 +138,7 @@ class PlayScriptStageImpl : PlayScriptStage {
     ) {
         // previous actions check, status must be success, unless next action is threshold
         // put action into redis, and redis go ahead sync play script state
+        lock.lock()
         when (executeResponse.status) {
             ExecuteStatus.NONE -> {
                 throw BusinessException("Executed response has wrong status")
@@ -166,6 +165,7 @@ class PlayScriptStageImpl : PlayScriptStage {
             }
         }
         recordLogRepository.save(recordLog)
+        lock.unlock()
     }
 
     private fun actionThresholdNotPassHandler(
@@ -201,18 +201,17 @@ class PlayScriptStageImpl : PlayScriptStage {
         recordLog: PlayScriptExecuteRecordLog
     ) {
         //find next action by current action, if these dependence are not all pass, waiting for another handler to finished it
-        val allMap = playScriptService.actionMapByUniqueId(action.playScriptId)
+        val allMap = recordService.invokedStatusMapByPlayScriptId(action.playScriptId)
         if (allMap.isEmpty()) {
             throw BusinessException("Engine has error")
         }
-        allMap[action.uniqueId]?.successFlag = IsFlag.YES
         //TODO async
 
         val next = action.next
         if (next.isEmpty()) {
             //check all finished
             val previous = playScriptService.findNextEmpty(action.playScriptId)
-            val allFinished = previous.all { (allMap[it]?.successFlag ?: IsFlag.NO) == IsFlag.YES }
+            val allFinished = previous.all { (allMap[it] ?: IsFlag.NO) == IsFlag.YES }
             if (allFinished) this.playScriptIsOver(recordLog)
         } else {
             //TODO
@@ -220,7 +219,7 @@ class PlayScriptStageImpl : PlayScriptStage {
             for (actionUniqueId in next) {
                 val previous = previousMap[actionUniqueId]
                 if (previous?.isNotEmpty() == true) {
-                    val previousCheckPass = previous.all { allMap[it]?.successFlag == IsFlag.YES }
+                    val previousCheckPass = previous.all { allMap[it] == IsFlag.YES }
                     if (previousCheckPass) flowToNext(actionUniqueId, recordLog)
                 } else {
                     logger.error("The action hasn't previous action but at processing flow, error data!")

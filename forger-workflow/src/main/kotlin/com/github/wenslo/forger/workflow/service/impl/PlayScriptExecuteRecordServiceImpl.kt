@@ -5,8 +5,11 @@ import com.github.wenslo.forger.workflow.condition.PlayScriptExecuteRecordCondit
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptExecuteRecord
+import com.github.wenslo.forger.workflow.enums.ExecuteStatus
+import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.enums.PlayScriptProcessStatus
 import com.github.wenslo.forger.workflow.repository.jpa.PlayScriptActionRepository
+import com.github.wenslo.forger.workflow.repository.jpa.PlayScriptExecuteRecordLogRepository
 import com.github.wenslo.forger.workflow.repository.jpa.PlayScriptExecuteRecordRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptExecuteRecordService
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +28,9 @@ class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService,
 
     @Autowired
     lateinit var actionRepository: PlayScriptActionRepository
+
+    @Autowired
+    lateinit var recordLogRepository: PlayScriptExecuteRecordLogRepository
 
     @Transactional
     override fun saveRecordAndGenerateShip(playScript: PlayScript): List<ExecuteShip> {
@@ -54,5 +60,13 @@ class PlayScriptExecuteRecordServiceImpl : PlayScriptExecuteRecordService,
     @Transactional
     override fun finishById(status: PlayScriptProcessStatus, recordId: Long) {
         recordRepository.updateProcessStatusById(status, recordId)
+    }
+
+    override fun invokedStatusMapByPlayScriptId(playScriptId: Long): Map<String, IsFlag> {
+        val list = recordLogRepository.findByPlayScriptId(playScriptId)
+        if (list.isEmpty()) return emptyMap()
+        return list.associateBy(
+            keySelector = { it.actionUniqueId },
+            valueTransform = { if (it.status == ExecuteStatus.SUCCEED) IsFlag.YES else IsFlag.NO })
     }
 }

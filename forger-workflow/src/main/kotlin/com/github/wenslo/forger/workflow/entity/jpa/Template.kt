@@ -19,7 +19,7 @@ data class Template(
     var description: String = "",
     var author: String = "",
     @Enumerated(EnumType.STRING)
-    var type: TemplateType = TemplateType.SCA,
+    var type: TemplateType = TemplateType.WORK_WX,
     var sortNum: String = "",
     @Transient
     var fields: List<FieldDto>? = emptyList()
