@@ -9,7 +9,9 @@ import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionTranslatedDa
 import com.github.wenslo.forger.workflow.entity.mongo.ExecutorTemplateParam
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionParamRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionTranslatedDataRepository
 import com.github.wenslo.forger.workflow.repository.mongo.ExecutorTemplateParamRepository
+import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.File
 
@@ -24,6 +26,12 @@ abstract class BaseExecutor {
 
     @Autowired
     lateinit var playscriptParamRepository: ExecutorActionParamRepository
+
+    @Autowired
+    lateinit var playScriptService: PlayScriptService
+
+    @Autowired
+    lateinit var executorActionTranslatedDataRepository: ExecutorActionTranslatedDataRepository
 
     open fun getExecutorType(): ExecutorType {
         return this.getResourceInfo().executorType
@@ -46,11 +54,38 @@ abstract class BaseExecutor {
         executorType: ExecutorType,
         actionUniqueId: String
     ): ExecutorActionParam? {
-        return playscriptParamRepository.findTopByPlayScriptIdAndActionExecutorTypeAndActionUniqueId(
-            playScriptId,
-            executorType,
-            actionUniqueId
-        )
+        val actionParam =
+            playscriptParamRepository.findTopByPlayScriptIdAndActionExecutorTypeAndActionUniqueId(
+                playScriptId,
+                executorType,
+                actionUniqueId
+            )
+        // find parameters from shuttle
+        val shuttles = playScriptService.findShuttleByPreviousActoin(playScriptId, actionUniqueId)
+        if (shuttles.isEmpty()) {
+            return actionParam
+        }
+
+        val previousActionIdList = shuttles.map { it.previousActionUniqueId }.distinct().toList()
+        // get result from action
+        val previousActionResults =
+            executorActionTranslatedDataRepository.findByPlayScriptIdAndActionUniqueIdIn(
+                playScriptId,
+                previousActionIdList
+            )
+        if (previousActionResults.isEmpty()) {
+            return actionParam
+        }
+        // find needs params
+        val previousFinishedActions =
+            previousActionResults.associateBy(keySelector = { it.actionUniqueId }, valueTransform = { it })
+        // TODO improve it
+        for (previous in previousActionIdList) {
+            val currents = previousFinishedActions[previous] ?: continue
+            val fieldDto = currents.params
+        }
+
+        return actionParam
     }
 
     abstract fun getResourceInfo(): ActionDto

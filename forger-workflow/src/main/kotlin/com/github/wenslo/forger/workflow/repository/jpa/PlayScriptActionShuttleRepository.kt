@@ -9,4 +9,10 @@ import org.springframework.stereotype.Repository
  * @date 2022/10/30 11:04
  */
 @Repository
-interface PlayScriptActionShuttleRepository : LongIdRepository<PlayScriptActionShuttle, Long>
+interface PlayScriptActionShuttleRepository : LongIdRepository<PlayScriptActionShuttle, Long> {
+
+    fun findByPlayScriptIdAndNextActionUniqueId(
+        playScriptId: Long,
+        actionUniqueId: String
+    ): List<PlayScriptActionShuttle>
+}

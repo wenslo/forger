@@ -7,6 +7,7 @@ import com.github.wenslo.forger.workflow.cache.ExecuteFactory
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptAction
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptActionShuttle
 import com.github.wenslo.forger.workflow.entity.jpa.Template
 import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionParam
 import com.github.wenslo.forger.workflow.entity.mongo.ExecutorTemplateParam
@@ -181,6 +182,13 @@ class PlayScriptServiceImpl : PlayScriptService,
         }.toList()
         executorActionParamRepository.saveAll(list)
 
+    }
+
+    override fun findShuttleByPreviousActoin(
+        playScriptId: Long,
+        actionUniqueId: String
+    ): List<PlayScriptActionShuttle> {
+        return playScriptActionShuttleRepository.findByPlayScriptIdAndNextActionUniqueId(playScriptId, actionUniqueId)
     }
 
     @Transactional(readOnly = false)

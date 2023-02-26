@@ -4,6 +4,7 @@ import com.github.wenslo.forger.data.jpa.service.LongIdService
 import com.github.wenslo.forger.workflow.condition.PlayScriptCondition
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptAction
+import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptActionShuttle
 
 /**
  * @author wenhailin
@@ -31,4 +32,6 @@ interface PlayScriptService : LongIdService<PlayScript, PlayScriptCondition> {
     fun findNextEmpty(playScriptId: Long): List<String>
 
     fun saveTemplateParams(playScript: PlayScript)
+
+    fun findShuttleByPreviousActoin(playScriptId: Long, actionUniqueId: String): List<PlayScriptActionShuttle>
 }
