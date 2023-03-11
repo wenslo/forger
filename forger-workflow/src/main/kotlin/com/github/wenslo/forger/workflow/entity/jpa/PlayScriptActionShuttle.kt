@@ -10,7 +10,7 @@ import javax.persistence.Entity
  */
 @Entity
 data class PlayScriptActionShuttle(
-    var playScriptId: Int = 0,
+    var playScriptId: Long = 0,
     var playScriptUniqueId: String = "",
     var previousActionUniqueId: String = "",
     var previousActionFieldName: String = "",

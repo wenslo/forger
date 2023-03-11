@@ -90,8 +90,11 @@ object FieldDtoUtil {
             FieldType.LINUX_PATH -> {
                 return Validator.isMatchRegex("^(/[^/]*)+/?$", value) && value.length <= len
             }
+
+            else -> {
+                return true
+            }
         }
-        return true
     }
 
     fun <T> convert(fields: List<FieldDto>?, clazz: Class<T>): T? {

@@ -12,11 +12,11 @@ import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.executor.BaseExecutor
+import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.req.WorkWxActionReq
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxBaseRes
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxToken
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxUser
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxUserInfo
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxActionReq
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxTemplateDto
 import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionOriginDataRepository
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
@@ -109,7 +109,7 @@ class WorkWxExecutor : BaseExecutor() {
             val workWxUserInfo = gson.fromJson(respStr, WorkWxUserInfo::class.java)
             userList.add(workWxUserInfo)
         }
-        return WorkWxUser(userList = userList)
+        return WorkWxUser(userList = userList, content = actionDto.content)
     }
 
     private fun saveTranslatedData(ship: ExecuteShip, user: WorkWxUser) {

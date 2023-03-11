@@ -154,8 +154,8 @@ class PlayScriptServiceImpl : PlayScriptService,
             return
         }
         val list = shuttles.values.flatten().map {
-            it.playScriptId = it.playScriptId
-            it.playScriptUniqueId = it.playScriptUniqueId
+            it.playScriptId = playScript.id ?: 0L
+            it.playScriptUniqueId = playScript.uniqueId
             it
         }.toList()
         playScriptActionShuttleRepository.saveAll(list)

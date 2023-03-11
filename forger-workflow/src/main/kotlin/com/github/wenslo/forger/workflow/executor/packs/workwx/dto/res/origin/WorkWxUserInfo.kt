@@ -11,5 +11,6 @@ data class WorkWxUserInfo(
 ) : WorkWxBaseRes()
 
 data class WorkWxUser(
-    var userList: List<WorkWxUserInfo> = emptyList()
+    var userList: List<WorkWxUserInfo> = emptyList(),
+    var content: String? = ""
 )
