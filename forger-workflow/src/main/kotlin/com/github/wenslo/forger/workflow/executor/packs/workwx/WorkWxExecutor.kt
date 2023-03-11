@@ -5,20 +5,17 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
-import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionOriginData
-import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionTranslatedData
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.executor.BaseExecutor
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.req.WorkWxActionReq
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxBaseRes
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxToken
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxUser
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin.WorkWxUserInfo
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates.WorkWxTemplateDto
-import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionOriginDataRepository
+import com.github.wenslo.forger.workflow.executor.packs.workwx.define.WorkWxActionDto
+import com.github.wenslo.forger.workflow.executor.packs.workwx.define.WorkWxTemplateDto
+import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxBaseRes
+import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxToken
+import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxUser
+import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxUserInfo
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
 import com.google.gson.Gson
@@ -52,9 +49,6 @@ class WorkWxExecutor : BaseExecutor() {
     @Autowired
     lateinit var gson: Gson
 
-    @Autowired
-    lateinit var executorActionOriginDataRepository: ExecutorActionOriginDataRepository
-
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
         asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE, executorType = ExecutorType.WORK_WX_SEND
@@ -76,17 +70,17 @@ class WorkWxExecutor : BaseExecutor() {
                 status = ExecuteStatus.PARAMS_NOT_EXISTS,
                 message = ExecuteStatus.PARAMS_NOT_EXISTS.name
             )
-        val templateDto = FieldDtoUtil.convert(templateParam.params, WorkWxTemplateDto::class.java)
-        val actionDto = FieldDtoUtil.convert(actionParam.params, WorkWxActionReq::class.java)
+        val templateDto = FieldDtoUtil.convert(templateParam, WorkWxTemplateDto::class.java)
+        val actionDto = FieldDtoUtil.convert(actionParam, WorkWxActionDto::class.java)
         if (templateDto == null || actionDto == null) return ExecutorResponse(
             status = ExecuteStatus.ERROR,
             message = "error"
         )
         val token = getWorkWeixinToken(templateDto)
         val status = sendWorkWeixinInfo(token, templateDto, actionDto)
-        val user = getWorkWeixinUser(token, actionDto)
-        this.saveOriginData(ship, user)
-        this.saveTranslatedData(ship, user)
+        val users = getWorkWeixinUser(token, actionDto)
+//        this.saveOriginData(ship, user)
+//        this.saveTranslatedData(ship, user)
         return if (status) {
             //return executed response
             ExecutorResponse(originData = actionDto, translatedData = actionDto)
@@ -98,8 +92,8 @@ class WorkWxExecutor : BaseExecutor() {
 
     private fun getWorkWeixinUser(
         token: WorkWxToken,
-        actionDto: WorkWxActionReq,
-    ): WorkWxUser {
+        actionDto: WorkWxActionDto,
+    ): MutableList<WorkWxUserInfo> {
         val userList = mutableListOf<WorkWxUserInfo>()
         actionDto.userIdList.forEach { userId ->
             val requestUrl = GET_USER_URL + "?access_token=${token.accessToken}&userid=${userId}"
@@ -109,37 +103,37 @@ class WorkWxExecutor : BaseExecutor() {
             val workWxUserInfo = gson.fromJson(respStr, WorkWxUserInfo::class.java)
             userList.add(workWxUserInfo)
         }
-        return WorkWxUser(userList = userList, content = actionDto.content)
+        return userList
     }
 
     private fun saveTranslatedData(ship: ExecuteShip, user: WorkWxUser) {
-        val executorActionTranslatedData = ExecutorActionTranslatedData().apply {
-            this.playScriptId = ship.playScriptId
-            this.playScriptUniqueId = ship.playScriptUniqueId
-            this.actionUniqueId = ship.current
-            this.actionExecutorType = super.getExecutorType()
-            this.recordLogId = ship.recordLogId
-            this.params = user
-        }
-        executorActionTranslatedDataRepository.save(executorActionTranslatedData)
+//        val executorActionTranslatedData = ExecutorActionTranslatedData().apply {
+//            this.playScriptId = ship.playScriptId
+//            this.playScriptUniqueId = ship.playScriptUniqueId
+//            this.actionUniqueId = ship.current
+//            this.actionExecutorType = super.getExecutorType()
+//            this.recordLogId = ship.recordLogId
+//            this.params = user
+//        }
+//        executorActionTranslatedDataRepository.save(executorActionTranslatedData)
     }
 
     private fun saveOriginData(ship: ExecuteShip, user: WorkWxUser) {
-        val executorActionOriginData = ExecutorActionOriginData().apply {
-            this.playScriptId = ship.playScriptId
-            this.playScriptUniqueId = ship.playScriptUniqueId
-            this.actionUniqueId = ship.current
-            this.actionExecutorType = super.getExecutorType()
-            this.recordLogId = ship.recordLogId
-            this.params = user
-        }
-        executorActionOriginDataRepository.save(executorActionOriginData)
+//        val executorActionOriginData = ExecutorActionOriginData().apply {
+//            this.playScriptId = ship.playScriptId
+//            this.playScriptUniqueId = ship.playScriptUniqueId
+//            this.actionUniqueId = ship.current
+//            this.actionExecutorType = super.getExecutorType()
+//            this.recordLogId = ship.recordLogId
+//            this.params = user
+//        }
+//        executorActionOriginDataRepository.save(executorActionOriginData)
     }
 
     private fun sendWorkWeixinInfo(
         token: WorkWxToken,
         templateDto: WorkWxTemplateDto,
-        actionDto: WorkWxActionReq
+        actionDto: WorkWxActionDto
     ): Boolean {
         val weixinUserIdParam = actionDto.userIdList.joinToString("|")
         val param = object {
@@ -188,15 +182,15 @@ class WorkWxExecutor : BaseExecutor() {
         return gson.fromJson(respStr, WorkWxToken::class.java)
     }
 
-    override fun getOriginData(playScriptId: Long, recordLogId: Long): ExecutorActionOriginData {
-        return executorActionOriginDataRepository.findTopByPlayScriptIdAndRecordLogId(playScriptId, recordLogId)
-            ?: ExecutorActionOriginData()
-    }
-
-    override fun getTranslatedData(playScriptId: Long, recordLogId: Long): ExecutorActionTranslatedData {
-        return executorActionTranslatedDataRepository.findTopByPlayScriptIdAndRecordLogId(playScriptId, recordLogId)
-            ?: ExecutorActionTranslatedData()
-    }
+//    override fun getOriginData(playScriptId: Long, recordLogId: Long): ExecutorActionOriginData {
+//        return executorActionOriginDataRepository.findTopByPlayScriptIdAndRecordLogId(playScriptId, recordLogId)
+//            ?: ExecutorActionOriginData()
+//    }
+//
+//    override fun getTranslatedData(playScriptId: Long, recordLogId: Long): ExecutorActionTranslatedData {
+//        return executorActionTranslatedDataRepository.findTopByPlayScriptIdAndRecordLogId(playScriptId, recordLogId)
+//            ?: ExecutorActionTranslatedData()
+//    }
 
     override fun thresholdCheck() {
         TODO("Not yet implemented")

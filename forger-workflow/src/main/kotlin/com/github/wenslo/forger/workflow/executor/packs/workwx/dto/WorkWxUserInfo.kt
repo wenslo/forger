@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.res.origin
+package com.github.wenslo.forger.workflow.executor.packs.workwx.dto
 
 /**
  * @author wenhailin
@@ -10,7 +10,6 @@ data class WorkWxUserInfo(
     var department: List<Int> = emptyList()
 ) : WorkWxBaseRes()
 
-data class WorkWxUser(
-    var userList: List<WorkWxUserInfo> = emptyList(),
-    var content: String? = ""
+open class WorkWxUser(
+
 )

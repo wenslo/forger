@@ -1,4 +1,4 @@
-package com.github.wenslo.forger.workflow.executor.packs.workwx.dto.templates
+package com.github.wenslo.forger.workflow.executor.packs.workwx.define
 
 import com.github.wenslo.forger.workflow.annotations.FieldDefine
 import com.github.wenslo.forger.workflow.annotations.TemplateUse
