@@ -5,6 +5,7 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
+import com.github.wenslo.forger.workflow.entity.mongo.ActionLogBasicInfo
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
 import com.github.wenslo.forger.workflow.enums.ExecutorType
@@ -14,8 +15,11 @@ import com.github.wenslo.forger.workflow.executor.packs.workwx.define.WorkWxActi
 import com.github.wenslo.forger.workflow.executor.packs.workwx.define.WorkWxTemplateDto
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxBaseRes
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxToken
-import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxUser
 import com.github.wenslo.forger.workflow.executor.packs.workwx.dto.WorkWxUserInfo
+import com.github.wenslo.forger.workflow.executor.packs.workwx.entity.WorkWxActionOp
+import com.github.wenslo.forger.workflow.executor.packs.workwx.entity.WorkWxActionTran
+import com.github.wenslo.forger.workflow.executor.packs.workwx.repository.WorkWxActionOpRepository
+import com.github.wenslo.forger.workflow.executor.packs.workwx.repository.WorkWxActionTranRepository
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
 import com.google.gson.Gson
@@ -49,6 +53,12 @@ class WorkWxExecutor : BaseExecutor() {
     @Autowired
     lateinit var gson: Gson
 
+    @Autowired
+    lateinit var actionOpRepository: WorkWxActionOpRepository
+
+    @Autowired
+    lateinit var actionTranRepository: WorkWxActionTranRepository
+
     override fun getResourceInfo(): ActionDto = ActionDto(
         name = "WorkWeixin", "V1.0", "Work Weixin", author = "Warren Wen",
         asyncFlag = IsFlag.NO, actionType = ActionType.NOTICE, executorType = ExecutorType.WORK_WX_SEND
@@ -79,8 +89,9 @@ class WorkWxExecutor : BaseExecutor() {
         val token = getWorkWeixinToken(templateDto)
         val status = sendWorkWeixinInfo(token, templateDto, actionDto)
         val users = getWorkWeixinUser(token, actionDto)
-//        this.saveOriginData(ship, user)
-//        this.saveTranslatedData(ship, user)
+        val basicInfo = this.saveActionLogBasicInfo(ship)
+        this.saveActionOp(basicInfo, actionDto)
+        this.saveActionTran(basicInfo, users, actionDto.content)
         return if (status) {
             //return executed response
             ExecutorResponse(originData = actionDto, translatedData = actionDto)
@@ -88,6 +99,18 @@ class WorkWxExecutor : BaseExecutor() {
             ExecutorResponse(status = ExecuteStatus.ERROR, message = "error")
         }
 
+    }
+
+    private fun saveActionLogBasicInfo(ship: ExecuteShip): ActionLogBasicInfo {
+        val info = ActionLogBasicInfo().apply {
+            this.playScriptId = ship.playScriptId
+            this.playScriptUniqueId = ship.playScriptUniqueId
+            this.actionUniqueId = ship.current
+            this.actionExecutorType = super.getExecutorType()
+            this.recordLogId = ship.recordLogId
+        }
+        basicRepository.save(info)
+        return info
     }
 
     private fun getWorkWeixinUser(
@@ -106,28 +129,23 @@ class WorkWxExecutor : BaseExecutor() {
         return userList
     }
 
-    private fun saveTranslatedData(ship: ExecuteShip, user: WorkWxUser) {
-//        val executorActionTranslatedData = ExecutorActionTranslatedData().apply {
-//            this.playScriptId = ship.playScriptId
-//            this.playScriptUniqueId = ship.playScriptUniqueId
-//            this.actionUniqueId = ship.current
-//            this.actionExecutorType = super.getExecutorType()
-//            this.recordLogId = ship.recordLogId
-//            this.params = user
-//        }
-//        executorActionTranslatedDataRepository.save(executorActionTranslatedData)
+    private fun saveActionOp(basic: ActionLogBasicInfo, actionDto: WorkWxActionDto) {
+        val op = WorkWxActionOp().apply {
+            this.actionLogId = basic.id
+            this.userIdList = actionDto.userIdList
+            this.content = actionDto.content
+        }
+        actionOpRepository.save(op)
     }
 
-    private fun saveOriginData(ship: ExecuteShip, user: WorkWxUser) {
-//        val executorActionOriginData = ExecutorActionOriginData().apply {
-//            this.playScriptId = ship.playScriptId
-//            this.playScriptUniqueId = ship.playScriptUniqueId
-//            this.actionUniqueId = ship.current
-//            this.actionExecutorType = super.getExecutorType()
-//            this.recordLogId = ship.recordLogId
-//            this.params = user
-//        }
-//        executorActionOriginDataRepository.save(executorActionOriginData)
+
+    private fun saveActionTran(basic: ActionLogBasicInfo, users: MutableList<WorkWxUserInfo>, content: String) {
+        val tran = WorkWxActionTran().apply {
+            this.actionLogId = basic.id
+            this.userList = users
+            this.content = content
+        }
+        actionTranRepository.save(tran)
     }
 
     private fun sendWorkWeixinInfo(

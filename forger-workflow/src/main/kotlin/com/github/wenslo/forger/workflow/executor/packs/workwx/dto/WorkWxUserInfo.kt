@@ -9,7 +9,3 @@ data class WorkWxUserInfo(
     var username: String = "",
     var department: List<Int> = emptyList()
 ) : WorkWxBaseRes()
-
-open class WorkWxUser(
-
-)

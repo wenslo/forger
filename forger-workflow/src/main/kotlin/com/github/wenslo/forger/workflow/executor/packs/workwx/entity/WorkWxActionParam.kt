@@ -1,18 +1,24 @@
 package com.github.wenslo.forger.workflow.executor.packs.workwx.entity
 
-import com.github.wenslo.forger.workflow.annotations.ActionResponse
+import com.github.wenslo.forger.workflow.annotations.ActionRequest
 import com.github.wenslo.forger.workflow.annotations.FieldDefine
 import com.github.wenslo.forger.workflow.enums.ExecutorType
 import com.github.wenslo.forger.workflow.enums.TemplateType
 import com.github.wenslo.forger.workflow.executor.packs.common.ActionIdEntity
 import com.github.wenslo.forger.workflow.executor.packs.common.ParamCacheable
+import org.bson.types.ObjectId
+import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.MongoId
 
 /**
  * @author wenhailin
  * @date 2022/11/27 14:31
  */
-@ActionResponse(templateType = TemplateType.WORK_WX, executorType = ExecutorType.WORK_WX_SEND)
+@Document("work_wx_action_param")
+@ActionRequest(templateType = TemplateType.WORK_WX, executorType = ExecutorType.WORK_WX_SEND)
 open class WorkWxActionParam(
+    @MongoId
+    var id: ObjectId? = null,
     @FieldDefine(
         describe = "user_id",
         sortNum = 1

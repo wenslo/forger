@@ -5,6 +5,7 @@ import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
 import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.enums.ExecutorType
+import com.github.wenslo.forger.workflow.repository.mongo.ActionLogBasicInfoRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.File
@@ -18,6 +19,9 @@ abstract class BaseExecutor {
     @Autowired
     lateinit var playScriptService: PlayScriptService
 
+    @Autowired
+    lateinit var basicRepository: ActionLogBasicInfoRepository
+
     open fun getExecutorType(): ExecutorType {
         return this.getResourceInfo().executorType
     }
@@ -27,6 +31,7 @@ abstract class BaseExecutor {
         executorType: ExecutorType,
         actionUniqueId: String
     ): List<FieldDto>? {
+        //TODO not implement
         return emptyList()
     }
 
@@ -35,6 +40,7 @@ abstract class BaseExecutor {
         executorType: ExecutorType,
         actionUniqueId: String
     ): List<FieldDto>? {
+        //TODO not implement
         return emptyList()
         // find parameters from shuttle
 //        val shuttles = playScriptService.findShuttleByPreviousActoin(playScriptId, actionUniqueId)
