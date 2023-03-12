@@ -17,4 +17,21 @@ class ActionFields(
     var id: ObjectId? = null,
     @Field(value = "action_info_id", targetType = FieldType.OBJECT_ID)
     var actionInfoId: ObjectId? = null
-) : FieldDto()
+) : FieldDto() {
+
+    fun copyFromFieldDto(it: FieldDto, actionUniqueId: String, objectIdMap: Map<String, ObjectId?>): ActionFields {
+        this.name = it.name
+        this.describe = it.describe
+        this.type = it.type
+        this.requireFlag = it.requireFlag
+        this.min = it.min
+        this.max = it.max
+        this.len = it.len
+        this.sortNum = it.sortNum
+        this.value = it.value
+        this.operators = it.operators
+        this.executorType = it.executorType
+        this.actionInfoId = objectIdMap[actionUniqueId]
+        return this
+    }
+}

@@ -18,5 +18,5 @@ data class ActionBasicInfo(
     var playScriptUniqueId: String = "",
     var actionUniqueId: String = "",
     var actionExecutorType: ExecutorType = ExecutorType.NONE,
-    val templateFlag: IsFlag = IsFlag.NO
+    var templateFlag: IsFlag = IsFlag.NO
 )

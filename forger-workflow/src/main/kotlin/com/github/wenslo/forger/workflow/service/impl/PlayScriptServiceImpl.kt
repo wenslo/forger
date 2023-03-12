@@ -9,13 +9,14 @@ import com.github.wenslo.forger.workflow.entity.jpa.PlayScript
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptAction
 import com.github.wenslo.forger.workflow.entity.jpa.PlayScriptActionShuttle
 import com.github.wenslo.forger.workflow.entity.jpa.Template
-import com.github.wenslo.forger.workflow.entity.mongo.ExecutorActionParam
-import com.github.wenslo.forger.workflow.entity.mongo.ExecutorTemplateParam
+import com.github.wenslo.forger.workflow.entity.mongo.ActionBasicInfo
+import com.github.wenslo.forger.workflow.entity.mongo.ActionFields
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecutorType
+import com.github.wenslo.forger.workflow.enums.IsFlag
 import com.github.wenslo.forger.workflow.repository.jpa.*
-import com.github.wenslo.forger.workflow.repository.mongo.ExecutorActionParamRepository
-import com.github.wenslo.forger.workflow.repository.mongo.ExecutorTemplateParamRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ActionBasicInfoRepository
+import com.github.wenslo.forger.workflow.repository.mongo.ActionFieldsRepository
 import com.github.wenslo.forger.workflow.service.PlayScriptService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -54,10 +55,13 @@ class PlayScriptServiceImpl : PlayScriptService,
     lateinit var playScriptActionShuttleRepository: PlayScriptActionShuttleRepository
 
     @Autowired
-    lateinit var executorActionParamRepository: ExecutorActionParamRepository
+    lateinit var actionBasicInfoRepository: ActionBasicInfoRepository
 
     @Autowired
-    lateinit var executorTemplateParamRepository: ExecutorTemplateParamRepository
+    lateinit var actionLogBasicInfoRepository: ActionBasicInfoRepository
+
+    @Autowired
+    lateinit var actionFieldsRepository: ActionFieldsRepository
 
     @Autowired
     lateinit var templateActionRepository: TemplateActionRepository
@@ -172,16 +176,25 @@ class PlayScriptServiceImpl : PlayScriptService,
         val executorTypeMap = playScript.nodes.associateBy({ it.uniqueId }, { it.executorType })
         val list = params.entries.map {
             val actionUniqueId = it.key
-            ExecutorActionParam().apply {
+            ActionBasicInfo().apply {
                 this.playScriptId = playScriptId ?: 0
                 this.playScriptUniqueId = playScriptUniqueId
                 this.actionUniqueId = actionUniqueId
                 this.actionExecutorType = executorTypeMap[actionUniqueId] ?: ExecutorType.NONE
-                this.params = it.value
+                this.templateFlag = IsFlag.NO
             }
         }.toList()
-        executorActionParamRepository.saveAll(list)
+        actionBasicInfoRepository.saveAll(list)
 
+        //save fields
+        val objectIdMap = list.associateBy(keySelector = { it.actionUniqueId }, valueTransform = { it.id })
+        val fields = params.entries.map {
+            val actionUniqueId = it.key
+            it.value.map { field ->
+                ActionFields().copyFromFieldDto(field, actionUniqueId, objectIdMap = objectIdMap)
+            }.toList()
+        }.flatMap { it.toList() }.toList()
+        actionFieldsRepository.saveAll(fields)
     }
 
     override fun findShuttleByPreviousActoin(
@@ -222,29 +235,48 @@ class PlayScriptServiceImpl : PlayScriptService,
         val templateFieldMap = record.associateBy({ it.id }, { it.fields })
 
 
-        val list = mutableListOf<ExecutorTemplateParam>()
+        val basics = mutableListOf<ActionBasicInfo>()
+        for (node in nodes) {
+            val executorType =
+                executeFactory.getExecutor(node.executorType)?.getResourceInfo()?.executorType ?: ExecutorType.NONE
+            if (executorType == ExecutorType.NONE) {
+                throw BusinessException("Illegal templates")
+            }
+            // find it node belong template's parameter, and saving it
+            templateExecutorMap[executorType]?.let {
+                val fieldDtoList = templateFieldMap[it]
+                if (fieldDtoList?.isEmpty() == true) {
+                    throw BusinessException("Template is not installed")
+                }
+                basics.add(ActionBasicInfo().apply {
+                    this.playScriptId = playScript.id ?: 0
+                    this.playScriptUniqueId = playScript.uniqueId
+                    this.actionUniqueId = node.uniqueId
+                    this.actionExecutorType = node.executorType
+                    this.templateFlag = IsFlag.YES
+                })
+            }
+        }
+
+        if (basics.isEmpty()) {
+            throw BusinessException("Illegal templates")
+        }
+        actionBasicInfoRepository.saveAll(basics)
+        val fields = mutableListOf<ActionFields>()
+        //save fields
+        val objectIdMap = basics.associateBy(keySelector = { it.actionUniqueId }, valueTransform = { it.id })
         for (node in nodes) {
             val executorType =
                 executeFactory.getExecutor(node.executorType)?.getResourceInfo()?.executorType ?: ExecutorType.NONE
             // find it node belong template's parameter, and saving it
-            templateExecutorMap[executorType]?.let {
-                templateFieldMap[it]?.let { fieldDtoList ->
-                    val param = ExecutorTemplateParam().apply {
-                        this.actionExecutorType = node.executorType
-                        this.actionUniqueId = node.uniqueId
-                        this.playScriptId = playScript.id ?: 0
-                        this.playScriptUniqueId = playScript.uniqueId
-                        this.params = fieldDtoList
-                    }
-                    list.add(param)
-                }
+            templateExecutorMap[executorType]?.let { it ->
+                val fieldDtoList = templateFieldMap[it]
+                fieldDtoList?.map { field ->
+                    ActionFields().copyFromFieldDto(field, node.uniqueId, objectIdMap = objectIdMap)
+                }?.forEach { field -> fields.add(field) }
             }
         }
-
-        if (list.isEmpty()) {
-            throw BusinessException("Template is not installed")
-        }
-        executorTemplateParamRepository.saveAll(list)
+        actionFieldsRepository.saveAll(fields)
     }
 
     override fun actionMapByUniqueId(playScriptId: Long): Map<String, PlayScriptAction> {

@@ -5,6 +5,7 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
+import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.entity.mongo.ActionLogBasicInfo
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
@@ -99,6 +100,24 @@ class WorkWxExecutor : BaseExecutor() {
             ExecutorResponse(status = ExecuteStatus.ERROR, message = "error")
         }
 
+    }
+
+    override fun saveActionParam(
+        playScriptId: Long,
+        playScriptUniqueId: String,
+        actionUniqueId: String,
+        fields: List<FieldDto>
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveTemplateParam(
+        playScriptId: Long,
+        playScriptUniqueId: String,
+        actionUniqueId: String,
+        fields: List<FieldDto>
+    ) {
+        TODO("Not yet implemented")
     }
 
     private fun saveActionLogBasicInfo(ship: ExecuteShip): ActionLogBasicInfo {

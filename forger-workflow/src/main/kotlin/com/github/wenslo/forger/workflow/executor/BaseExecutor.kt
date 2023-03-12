@@ -74,6 +74,20 @@ abstract class BaseExecutor {
 
     abstract fun execute(ship: ExecuteShip): ExecutorResponse
 
+    abstract fun saveActionParam(
+        playScriptId: Long,
+        playScriptUniqueId: String,
+        actionUniqueId: String,
+        fields: List<FieldDto>
+    )
+
+    abstract fun saveTemplateParam(
+        playScriptId: Long,
+        playScriptUniqueId: String,
+        actionUniqueId: String,
+        fields: List<FieldDto>
+    )
+
 //    abstract fun getOriginData(playScriptId: Long, recordLogId: Long): ExecutorActionOriginData
 //
 //    abstract fun getTranslatedData(playScriptId: Long, recordLogId: Long): ExecutorActionTranslatedData
