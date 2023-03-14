@@ -5,7 +5,6 @@ import com.github.wenslo.forger.core.inline.getLogger
 import com.github.wenslo.forger.workflow.domain.ActionDto
 import com.github.wenslo.forger.workflow.domain.ExecuteShip
 import com.github.wenslo.forger.workflow.domain.ExecutorResponse
-import com.github.wenslo.forger.workflow.domain.FieldDto
 import com.github.wenslo.forger.workflow.entity.mongo.ActionLogBasicInfo
 import com.github.wenslo.forger.workflow.enums.ActionType
 import com.github.wenslo.forger.workflow.enums.ExecuteStatus
@@ -23,7 +22,6 @@ import com.github.wenslo.forger.workflow.executor.packs.workwx.repository.WorkWx
 import com.github.wenslo.forger.workflow.executor.packs.workwx.repository.WorkWxActionTranRepository
 import com.github.wenslo.forger.workflow.utils.FieldDtoUtil
 import com.github.wenslo.forger.workflow.utils.HttpClientUtil
-import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.classic.methods.HttpPost
@@ -51,8 +49,6 @@ class WorkWxExecutor : BaseExecutor() {
     @Autowired
     lateinit var httpClient: CloseableHttpClient
 
-    @Autowired
-    lateinit var gson: Gson
 
     @Autowired
     lateinit var actionOpRepository: WorkWxActionOpRepository
@@ -102,23 +98,27 @@ class WorkWxExecutor : BaseExecutor() {
 
     }
 
-    override fun saveActionParam(
-        playScriptId: Long,
-        playScriptUniqueId: String,
-        actionUniqueId: String,
-        fields: List<FieldDto>
-    ) {
+    override fun getActionOp(playScriptId: Long, actionUniqueId: String): Any? {
         TODO("Not yet implemented")
     }
 
-    override fun saveTemplateParam(
-        playScriptId: Long,
-        playScriptUniqueId: String,
-        actionUniqueId: String,
-        fields: List<FieldDto>
-    ) {
-        TODO("Not yet implemented")
-    }
+//    override fun saveActionParam(
+//        playScriptId: Long,
+//        playScriptUniqueId: String,
+//        actionUniqueId: String,
+//        fields: List<FieldDto>
+//    ) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun saveTemplateParam(
+//        playScriptId: Long,
+//        playScriptUniqueId: String,
+//        actionUniqueId: String,
+//        fields: List<FieldDto>
+//    ) {
+//        TODO("Not yet implemented")
+//    }
 
     private fun saveActionLogBasicInfo(ship: ExecuteShip): ActionLogBasicInfo {
         val info = ActionLogBasicInfo().apply {
@@ -128,7 +128,7 @@ class WorkWxExecutor : BaseExecutor() {
             this.actionExecutorType = super.getExecutorType()
             this.recordLogId = ship.recordLogId
         }
-        basicRepository.save(info)
+        basicLogRepository.save(info)
         return info
     }
 

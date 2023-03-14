@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface ActionFieldsRepository : CrudRepository<ActionFields, ObjectId> {
+
+    fun findByActionInfoId(id: ObjectId): List<ActionFields>
 }

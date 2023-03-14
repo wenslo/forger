@@ -54,15 +54,15 @@ object FieldDtoUtil {
                     return false
                 }
                 val anInt = NumberUtil.parseInt(value)
-                return anInt >= field.min && anInt <= field.max
+                return anInt >= (field.min ?: 0) && anInt <= (field.max ?: 99)
             }
 
             FieldType.STRING -> {
-                return value.length <= len
+                return value.length <= (len ?: 0)
             }
 
             FieldType.ENCRYPT -> {
-                return value.length <= len
+                return value.length <= (len ?: 0)
             }
 
             FieldType.DATETIME -> {
@@ -76,19 +76,19 @@ object FieldDtoUtil {
             }
 
             FieldType.EMAIL -> {
-                return Validator.isEmail(value) && value.length <= len
+                return Validator.isEmail(value) && value.length <= (len ?: 0)
             }
 
             FieldType.URL -> {
-                return Validator.isUrl(value) && value.length <= len
+                return Validator.isUrl(value) && value.length <= (len ?: 0)
             }
 
             FieldType.IP -> {
-                return Validator.isIpv4(value) && value.length <= len
+                return Validator.isIpv4(value) && value.length <= (len ?: 0)
             }
 
             FieldType.LINUX_PATH -> {
-                return Validator.isMatchRegex("^(/[^/]*)+/?$", value) && value.length <= len
+                return Validator.isMatchRegex("^(/[^/]*)+/?$", value) && value.length <= (len ?: 0)
             }
 
             else -> {
